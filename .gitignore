@@ -1,0 +1,21 @@
+# Common ignores
+.DS_Store
+*.log
+
+# Frontend (Next.js/React/Vite)
+frontend/lovable-logistics-hub/node_modules/
+frontend/lovable-logistics-hub/dist/
+frontend/lovable-logistics-hub/.next/
+frontend/lovable-logistics-hub/.env
+frontend/lovable-logistics-hub/.env.local
+
+# Backend (Spring Boot / Maven)
+SpringBackend/target/
+SpringBackend/.mvn/
+SpringBackend/.idea/
+SpringBackend/*.iml
+SpringBackend/src/main/resources/application.properties
+
+# Other
+.vscode/
+.idea/

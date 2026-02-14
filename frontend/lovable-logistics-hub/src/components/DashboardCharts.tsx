@@ -11,24 +11,8 @@ import {
   Bar,
 } from "recharts";
 
-const deliveryData = [
-  { name: "Mon", delivered: 142, pending: 18, failed: 4 },
-  { name: "Tue", delivered: 158, pending: 12, failed: 6 },
-  { name: "Wed", delivered: 175, pending: 22, failed: 3 },
-  { name: "Thu", delivered: 163, pending: 15, failed: 8 },
-  { name: "Fri", delivered: 190, pending: 10, failed: 2 },
-  { name: "Sat", delivered: 120, pending: 8, failed: 1 },
-  { name: "Sun", delivered: 88, pending: 5, failed: 2 },
-];
-
-const costData = [
-  { name: "Jan", fuel: 12400, maintenance: 3200, labor: 8500 },
-  { name: "Feb", fuel: 11800, maintenance: 4100, labor: 8500 },
-  { name: "Mar", fuel: 13200, maintenance: 2800, labor: 8800 },
-  { name: "Apr", fuel: 12100, maintenance: 5200, labor: 8500 },
-  { name: "May", fuel: 11500, maintenance: 3600, labor: 9000 },
-  { name: "Jun", fuel: 12900, maintenance: 2900, labor: 8700 },
-];
+const deliveryData: any[] = [];
+const costData: any[] = [];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload) return null;

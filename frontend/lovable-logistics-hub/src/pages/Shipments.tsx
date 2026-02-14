@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Package, MapPin, ArrowRight, Clock, Search, Filter, ChevronDown } from "lucide-react";
+import { Package, MapPin, ArrowRight, Clock, Search, Filter, ChevronDown, Bell } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { ShipmentsTableSkeleton, KpiCardSkeleton } from "@/components/DashboardSkeletons";
+import { toast } from "sonner";
 
 const allShipments = [
   { id: "SHP-7842", origin: "Los Angeles, CA", destination: "Chicago, IL", status: "In Transit", statusType: "active" as const, eta: "2h 15m", driver: "M. Rodriguez", weight: "2,400 kg", customer: "Acme Corp", created: "Feb 10, 2026" },
@@ -84,8 +85,8 @@ const ShipmentsPage = () => {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
-                {["Shipment", "Customer", "Route", "Status", "ETA", "Driver", "Weight", "Created"].map((h) => (
-                  <th key={h} className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider px-5 py-3">{h}</th>
+                {["Shipment", "Customer", "Route", "Status", "ETA", "Driver", "Weight", "Created", "Actions"].map((h) => (
+                  <th key={h} className={`text-xs font-medium text-muted-foreground uppercase tracking-wider px-5 py-3 ${h === 'Actions' ? 'text-right' : 'text-left'}`}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -122,6 +123,19 @@ const ShipmentsPage = () => {
                   <td className="px-5 py-3 text-sm text-foreground">{s.driver}</td>
                   <td className="px-5 py-3 text-sm font-mono text-muted-foreground">{s.weight}</td>
                   <td className="px-5 py-3 text-xs text-muted-foreground">{s.created}</td>
+                  <td className="px-5 py-3 text-right">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast.success(`MULTICHANNEL BROADCAST SENT`, {
+                          description: `Tracking updates sent to ${s.customer} via SMS, WhatsApp & Email.`,
+                        });
+                      }}
+                      className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
+                    >
+                      <Bell className="w-3.5 h-3.5" />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

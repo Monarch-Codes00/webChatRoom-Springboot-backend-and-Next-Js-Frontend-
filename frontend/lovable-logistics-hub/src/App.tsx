@@ -34,6 +34,7 @@ const AnimatedRoutes = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Index />} />
         <Route path="/fleet" element={<FleetPage />} />
+        <Route path="/warehouse" element={<WarehousePage />} />
         <Route path="/shipments" element={<ShipmentsPage />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />

@@ -8,26 +8,9 @@ import { TrendingUp, TrendingDown, DollarSign, Clock, Package, Truck, BrainCircu
 import DashboardLayout from "@/components/DashboardLayout";
 import { KpiCardSkeleton, ChartSkeleton } from "@/components/DashboardSkeletons";
 
-const monthlyDeliveries = [
-  { name: "Aug", value: 3200, forecast: 3200 }, 
-  { name: "Sep", value: 3800, forecast: 3800 }, 
-  { name: "Oct", value: 4100, forecast: 4100 },
-  { name: "Nov", value: 3900, forecast: 3900 }, 
-  { name: "Dec", value: 4500, forecast: 4500 }, 
-  { name: "Jan", value: 4800, forecast: 4800 }, 
-  { name: "Feb", value: 5200, forecast: 5200 },
-  { name: "Mar", forecast: 5600 }, // Forecasted data point
-  { name: "Apr", forecast: 5900 }, // Forecasted data point
-];
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
 
-const costPerMile = [
-  { name: "Aug", cost: 2.45 }, { name: "Sep", cost: 2.38 }, { name: "Oct", cost: 2.52 },
-  { name: "Nov", cost: 2.41 }, { name: "Dec", cost: 2.35 }, { name: "Jan", cost: 2.28 }, { name: "Feb", cost: 2.22 },
-];
-
-const deliveryByRegion = [
-  { name: "West", value: 35 }, { name: "Central", value: 28 }, { name: "East", value: 25 }, { name: "South", value: 12 },
-];
 const COLORS = ["hsl(195,100%,50%)", "hsl(142,70%,45%)", "hsl(38,92%,50%)", "hsl(280,65%,60%)"];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -44,18 +27,34 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-const kpis = [
-  { title: "Total Deliveries", value: "5,284", change: "+8.2%", positive: true, icon: Package },
-  { title: "Avg Cost/Mile", value: "$2.22", change: "-5.4%", positive: true, icon: DollarSign },
-  { title: "Avg Delivery Time", value: "4.2h", change: "-12min", positive: true, icon: Clock },
-  { title: "AI Capacity Forecast", value: "98.2%", change: "+4.1%", positive: true, icon: BrainCircuit },
-];
-
 const AnalyticsPage = () => {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => { const t = setTimeout(() => setLoading(false), 1200); return () => clearTimeout(t); }, []);
+  const { data: analyticsData, isLoading } = useQuery({
+    queryKey: ["analytics"],
+    queryFn: async () => {
+      // In a real app, this would be multiple calls or a single summary call
+      return {
+        monthlyDeliveries: [],
+        costPerMile: [],
+        deliveryByRegion: [],
+        kpis: [
+          { title: "Total Deliveries", value: "0", change: "0%", positive: true, icon: Package },
+          { title: "Avg Cost/Mile", value: "$0.00", change: "0%", positive: true, icon: DollarSign },
+          { title: "Avg Delivery Time", value: "0h", change: "0min", positive: true, icon: Clock },
+          { title: "AI Capacity Forecast", value: "0%", change: "0%", positive: true, icon: BrainCircuit },
+        ]
+      };
+    },
+    initialData: {
+      monthlyDeliveries: [],
+      costPerMile: [],
+      deliveryByRegion: [],
+      kpis: []
+    }
+  });
 
-  if (loading) {
+  const { monthlyDeliveries, costPerMile, deliveryByRegion, kpis } = analyticsData;
+
+  if (isLoading) {
     return (
       <DashboardLayout>
         <div>

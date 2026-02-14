@@ -4,16 +4,8 @@ import { Truck, Fuel, Gauge, Thermometer, MapPin, Wrench, CheckCircle, AlertTria
 import DashboardLayout from "@/components/DashboardLayout";
 import { KpiCardSkeleton, FleetCardSkeleton } from "@/components/DashboardSkeletons";
 
-const fleet = [
-  { id: "VH-001", name: "Freightliner Cascadia", plate: "CA-7842-XL", status: "active", fuel: 78, mileage: "124,320 mi", lastService: "Jan 12, 2026", nextService: "Mar 12, 2026", driver: "M. Rodriguez", location: "I-40, New Mexico", speed: 62, temp: 4.2 },
-  { id: "VH-002", name: "Kenworth T680", plate: "TX-3391-HV", status: "active", fuel: 45, mileage: "98,450 mi", lastService: "Dec 28, 2025", nextService: "Feb 28, 2026", driver: "K. Johnson", location: "I-10, Texas", speed: 58, temp: -18.5 },
-  { id: "VH-003", name: "Volvo VNL 860", plate: "CO-5519-RF", status: "idle", fuel: 22, mileage: "156,780 mi", lastService: "Feb 01, 2026", nextService: "Apr 01, 2026", driver: "A. Chen", location: "Denver Hub", speed: 0, temp: 2.1 },
-  { id: "VH-004", name: "Peterbilt 579", plate: "NY-8821-TK", status: "maintenance", fuel: 91, mileage: "201,100 mi", lastService: "Feb 05, 2026", nextService: "—", driver: "R. Smith", location: "Maintenance Bay #3", speed: 0, temp: null },
-  { id: "VH-005", name: "Mack Anthem", plate: "FL-2244-BG", status: "active", fuel: 63, mileage: "87,620 mi", lastService: "Jan 20, 2026", nextService: "Mar 20, 2026", driver: "J. Williams", location: "I-95, Georgia", speed: 55, temp: null },
-  { id: "VH-006", name: "International LT", plate: "IL-6678-MV", status: "active", fuel: 88, mileage: "45,200 mi", lastService: "Feb 08, 2026", nextService: "Apr 08, 2026", driver: "D. Martinez", location: "I-55, Illinois", speed: 61, temp: 3.8 },
-  { id: "VH-007", name: "Western Star 5700", plate: "WA-1190-XE", status: "idle", fuel: 34, mileage: "178,900 mi", lastService: "Nov 15, 2025", nextService: "Feb 15, 2026", driver: "—", location: "Seattle Yard", speed: 0, temp: null },
-  { id: "VH-008", name: "DAF XF", plate: "AZ-4455-KL", status: "active", fuel: 52, mileage: "112,340 mi", lastService: "Jan 30, 2026", nextService: "Mar 30, 2026", driver: "S. Patel", location: "I-17, Arizona", speed: 65, temp: -20.1 },
-];
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
 
 const statusConfig: Record<string, { label: string; class: string; icon: any }> = {
   active: { label: "Active", class: "text-success bg-success/10 border-success/20", icon: CheckCircle },
@@ -22,14 +14,22 @@ const statusConfig: Record<string, { label: string; class: string; icon: any }> 
 };
 
 const FleetPage = () => {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => { const t = setTimeout(() => setLoading(false), 1200); return () => clearTimeout(t); }, []);
+  const { data: fleetData, isLoading } = useQuery({
+    queryKey: ["fleet"],
+    queryFn: async () => {
+      const resp = await apiService.getVehicles();
+      return resp.data;
+    },
+    initialData: [],
+  });
 
-  const active = fleet.filter((v) => v.status === "active").length;
-  const idle = fleet.filter((v) => v.status === "idle").length;
-  const maint = fleet.filter((v) => v.status === "maintenance").length;
+  const fleet = Array.isArray(fleetData) ? fleetData : [];
 
-  if (loading) {
+  const active = fleet.filter((v: any) => v.status === "active").length;
+  const idle = fleet.filter((v: any) => v.status === "idle").length;
+  const maint = fleet.filter((v: any) => v.status === "maintenance").length;
+
+  if (isLoading) {
     return (
       <DashboardLayout>
         <div>

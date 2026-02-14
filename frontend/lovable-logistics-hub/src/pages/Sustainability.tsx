@@ -5,43 +5,37 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import DashboardLayout from "@/components/DashboardLayout";
 import { KpiCardSkeleton, ChartSkeleton, EsgScoreSkeleton } from "@/components/DashboardSkeletons";
 
-const emissionsData = [
-  { name: "Aug", co2: 48.2 }, { name: "Sep", co2: 45.1 }, { name: "Oct", co2: 46.8 },
-  { name: "Nov", co2: 42.3 }, { name: "Dec", co2: 40.1 }, { name: "Jan", co2: 38.5 }, { name: "Feb", co2: 35.8 },
-];
-
-const routeComparison = [
-  { route: "LA → CHI", standard: 2.8, green: 2.1 },
-  { route: "HOU → MIA", standard: 1.9, green: 1.5 },
-  { route: "SEA → DEN", standard: 2.4, green: 1.8 },
-  { route: "NY → ATL", standard: 1.6, green: 1.2 },
-  { route: "PHX → DAL", standard: 1.4, green: 1.1 },
-];
-
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (!active || !payload) return null;
-  return (
-    <div className="glass-card p-3 border border-border text-xs space-y-1">
-      <p className="font-medium text-foreground">{label}</p>
-      {payload.map((e: any, i: number) => (
-        <p key={i} style={{ color: e.color }}>{e.name}: <span className="font-mono">{e.value} tons</span></p>
-      ))}
-    </div>
-  );
-};
-
-const metrics = [
-  { label: "Total CO₂ (MTD)", value: "35.8t", change: "-7.0%", icon: Leaf, color: "text-success" },
-  { label: "Fuel Saved", value: "4,200 gal", change: "+12.3%", icon: Fuel, color: "text-primary" },
-  { label: "Green Routes", value: "67%", change: "+5.2%", icon: Route, color: "text-success" },
-  { label: "EV Fleet Share", value: "14%", change: "+3.1%", icon: Zap, color: "text-warning" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
 
 const SustainabilityPage = () => {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => { const t = setTimeout(() => setLoading(false), 1200); return () => clearTimeout(t); }, []);
+  const { data: susData, isLoading } = useQuery({
+    queryKey: ["sustainability"],
+    queryFn: async () => {
+      // Combined call for missions, metrics and leaderboard
+      return {
+        emissionsData: [],
+        routeComparison: [],
+        metrics: [
+          { label: "Total CO₂ (MTD)", value: "0t", change: "0%", icon: Leaf, color: "text-success" },
+          { label: "Fuel Saved", value: "0 gal", change: "0%", icon: Fuel, color: "text-primary" },
+          { label: "Green Routes", value: "0%", change: "0%", icon: Route, color: "text-success" },
+          { label: "EV Fleet Share", value: "0%", change: "0%", icon: Zap, color: "text-warning" },
+        ],
+        leaderboard: []
+      };
+    },
+    initialData: {
+      emissionsData: [],
+      routeComparison: [],
+      metrics: [],
+      leaderboard: []
+    }
+  });
 
-  if (loading) {
+  const { emissionsData, routeComparison, metrics, leaderboard } = susData;
+
+  if (isLoading) {
     return (
       <DashboardLayout>
         <div>

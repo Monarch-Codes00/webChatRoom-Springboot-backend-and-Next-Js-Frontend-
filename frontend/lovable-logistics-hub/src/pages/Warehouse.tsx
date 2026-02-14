@@ -5,20 +5,22 @@ import { Box, Truck, Clock, ArrowRight, AlertCircle, CheckCircle2 } from "lucide
 import DashboardLayout from "@/components/DashboardLayout";
 import { KpiCardSkeleton } from "@/components/DashboardSkeletons";
 
-const docks = [
-  { id: 1, name: "Dock A1", status: "Occupied", vehicle: "VH-001", active: "Unloading", tt: "24m", type: "Refrigerated" },
-  { id: 2, name: "Dock A2", status: "Available", vehicle: null, active: "Idle", tt: "0m", type: "Standard" },
-  { id: 3, name: "Dock A3", status: "Maintenance", vehicle: null, active: "Offline", tt: "N/A", type: "Standard" },
-  { id: 4, name: "Dock B1", status: "Occupied", vehicle: "VH-006", active: "Loading", tt: "42m", type: "Heavy Duty" },
-  { id: 5, name: "Dock B2", status: "Reserved", vehicle: "VH-008", active: "Arriving", tt: "15m", type: "Standard" },
-  { id: 6, name: "Dock B3", status: "Available", vehicle: null, active: "Idle", tt: "0m", type: "Refrigerated" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
 
 const WarehousePage = () => {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => { const t = setTimeout(() => setLoading(false), 1200); return () => clearTimeout(t); }, []);
+  const { data: docksData, isLoading } = useQuery({
+    queryKey: ["docks"],
+    queryFn: async () => {
+      const resp = await apiService.getDocks();
+      return resp.data;
+    },
+    initialData: [],
+  });
 
-  if (loading) {
+  const docks = Array.isArray(docksData) ? docksData : [];
+
+  if (isLoading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-between mb-6">

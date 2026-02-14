@@ -64,7 +64,7 @@ _Focus: Oversight, Profitability, and Rapid Action._
 - **Backend**: Spring Boot (Java) - providing a robust, scalable, and type-safe API.
 - **Database**: PostgreSQL - reliable relational data storage for complex logistics entities.
 - **Authentication**: Clerk - providing seamless RBAC and secure identity management.
-- **Maps / GIS**: Google Maps Platform (Javascript SDK, Directions API, Distance Matrix API).
+- **Maps / GIS**: Leaflet.js (Open-Source), OpenStreetMap, CartoDB Tiles (Dynamic Dark Mode).
 - **Real-time Communication**: Spring WebSockets (Stomp/SockJS) for live telemetry.
 
 ---

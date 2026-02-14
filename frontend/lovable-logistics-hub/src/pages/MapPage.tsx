@@ -1,19 +1,31 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Truck, Navigation, Layers, ZoomIn, ZoomOut, AlertTriangle } from "lucide-react";
+import { MapPin, Truck, Navigation, Layers, AlertTriangle } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
-import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { MapSkeleton, MapVehicleListSkeleton } from "@/components/DashboardSkeletons";
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+// Fix for default Leaflet marker icons in Vite
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+const DefaultIcon = L.icon({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const vehicles = [
-  { id: "VH-001", name: "Freightliner Cascadia", driver: "M. Rodriguez", position: { lat: 35.08, lng: -106.65 }, speed: 62, status: "active", heading: "E" },
-  { id: "VH-002", name: "Kenworth T680", driver: "K. Johnson", position: { lat: 29.76, lng: -95.37 }, speed: 58, status: "active", heading: "SE" },
-  { id: "VH-005", name: "Mack Anthem", driver: "J. Williams", position: { lat: 32.08, lng: -81.09 }, speed: 55, status: "active", heading: "S" },
-  { id: "VH-006", name: "International LT", driver: "D. Martinez", position: { lat: 41.88, lng: -87.63 }, speed: 61, status: "active", heading: "SW" },
-  { id: "VH-008", name: "DAF XF", driver: "S. Patel", position: { lat: 33.45, lng: -112.07 }, speed: 65, status: "active", heading: "N" },
+  { id: "VH-001", name: "Freightliner Cascadia", driver: "M. Rodriguez", position: [35.08, -106.65], speed: 62, status: "active", heading: "E" },
+  { id: "VH-002", name: "Kenworth T680", driver: "K. Johnson", position: [29.76, -95.37], speed: 58, status: "active", heading: "SE" },
+  { id: "VH-005", name: "Mack Anthem", driver: "J. Williams", position: [32.08, -81.09], speed: 55, status: "active", heading: "S" },
+  { id: "VH-006", name: "International LT", driver: "D. Martinez", position: [41.88, -87.63], speed: 61, status: "active", heading: "SW" },
+  { id: "VH-008", name: "DAF XF", driver: "S. Patel", position: [33.45, -112.07], speed: 65, status: "active", heading: "N" },
 ];
-
-const MAP_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const MapPage = () => {
   const [loading, setLoading] = useState(true);
@@ -38,12 +50,12 @@ const MapPage = () => {
     <DashboardLayout>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-foreground">Live Fleet Map</h2>
+          <h2 className="text-xl font-bold text-foreground">Live Fleet Map (OpenStreetMap)</h2>
           <p className="text-sm text-muted-foreground">{vehicles.length} vehicles currently in transit</p>
         </div>
         <div className="flex gap-2">
           <button className="px-3 py-1.5 rounded-lg bg-secondary text-muted-foreground hover:text-foreground text-xs font-medium transition-colors flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5" /> Traffic Layers
+            <Layers className="w-3.5 h-3.5" /> Satellite View
           </button>
           <button className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:opacity-90 transition-opacity flex items-center gap-1.5">
             <Navigation className="w-3.5 h-3.5" /> Optimize All Routes
@@ -56,50 +68,44 @@ const MapPage = () => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.98 }} 
           animate={{ opacity: 1, scale: 1 }} 
-          className="lg:col-span-3 glass-card relative overflow-hidden bg-muted/20" 
+          className="lg:col-span-3 glass-card relative overflow-hidden bg-muted/20 border-border/50" 
           style={{ minHeight: 600 }}
         >
-          {MAP_API_KEY ? (
-            <APIProvider apiKey={MAP_API_KEY}>
-              <Map
-                style={{ width: '100%', height: '100%' }}
-                defaultCenter={{ lat: 37.0902, lng: -95.7129 }}
-                defaultZoom={4}
-                gestureHandling={'greedy'}
-                disableDefaultUI={true}
-                mapId={'NEXUS_LOGISTICS_DARK'}
-              >
-                {vehicles.map((v) => (
-                  <Marker 
-                    key={v.id} 
-                    position={v.position}
-                    title={`${v.name} - ${v.driver}`}
-                  />
-                ))}
-              </Map>
-            </APIProvider>
-          ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-slate-950/50 backdrop-blur-sm">
-              <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-4 border border-amber-500/20">
-                <AlertTriangle className="w-8 h-8 text-amber-500" />
-              </div>
-              <h3 className="text-lg font-bold mb-2">Google Maps Key Required</h3>
-              <p className="max-w-md text-sm text-muted-foreground mb-6">
-                To enable the Live GIS tracking environment, please add your Google Maps API Key to the <code>.env</code> file.
-              </p>
-              <div className="p-4 bg-muted/50 rounded-lg border border-border w-full max-w-sm text-left font-mono text-[10px]">
-                VITE_GOOGLE_MAPS_API_KEY=your_key_here
-              </div>
-            </div>
-          )}
+          <MapContainer 
+            center={[37.0902, -95.7129]} 
+            zoom={4} 
+            scrollWheelZoom={true} 
+            className="w-full h-full z-10"
+            zoomControl={false}
+          >
+            {/* Using CartoDB Dark Matter tiles for premium look */}
+            <TileLayer
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            />
+            
+            <ZoomControl position="bottomright" />
+
+            {vehicles.map((v) => (
+              <Marker key={v.id} position={v.position as [number, number]}>
+                <Popup>
+                  <div className="p-2">
+                    <p className="font-bold text-primary">{v.id}</p>
+                    <p className="text-xs">{v.name}</p>
+                    <p className="text-[10px] text-muted-foreground mt-1">Driver: {v.driver}</p>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
 
           {/* Map Status Overlays */}
-          <div className="absolute top-4 left-4 flex gap-2">
-            <div className="glass-card px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-success/10 text-success border-success/20">
+          <div className="absolute top-4 left-4 flex gap-2 z-[1000]">
+            <div className="glass-card px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-success/10 text-success border-success/20 backdrop-blur-md">
               System Live
             </div>
-            <div className="glass-card px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border-primary/20">
-              GPS Sync Active
+            <div className="glass-card px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border-primary/20 backdrop-blur-md">
+              OpenStreetMap Active
             </div>
           </div>
         </motion.div>
@@ -114,7 +120,7 @@ const MapPage = () => {
               animate={{ opacity: 1, x: 0 }} 
               transition={{ delay: 0.1 + i * 0.05 }} 
               whileHover={{ scale: 1.02, x: -4 }} 
-              className="glass-card p-4 hover:border-primary/40 transition-all duration-200 cursor-pointer group"
+              className="glass-card p-4 hover:border-primary/40 transition-all duration-200 cursor-pointer group shadow-sm bg-card/30"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">

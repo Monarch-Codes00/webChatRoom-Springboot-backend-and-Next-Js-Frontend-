@@ -1,7 +1,5 @@
 # NexusLogistics - Smart Logistics & Fleet Management System
 
-
-
 ## 1. Project Overview
 
 NexusLogistics is a state-of-the-art platform designed to revolutionize shipment tracking, vehicle management, and route optimization. By leveraging real-time data, AI-driven analytics, and a robust microservices-inspired architecture, it provides complete operational transparency and efficiency.
@@ -26,8 +24,11 @@ NexusLogistics is a state-of-the-art platform designed to revolutionize shipment
 4.  **Digital Proof of Delivery (e-POD)**: Mobile-optimized capture for digital signatures, high-res cargo photos, and GPS-verified drop-offs.
 5.  **Sustainability & Carbon Tracking**: Tracks CO2 emissions per route and suggests "Greenest" alternative paths.
 6.  **Predictive Logistics Analytics**: Uses historical data and external factors (weather, traffic trends) to forecast demand and optimize fleet size.
-7.  **IoT Telematics Integration**: Live reporting of fuel levels, tire pressure, and cargo temperature (crucial for cold-chain logistics).
+7.  **IoT Telematics Integration**: Live reporting of fuel levels, tire pressure, and usage metrics to optimize operating costs.
 8.  **Automated Document Engine**: Auto-generation of Waybills, Invoices, and Custom Clearance documentation based on shipment data.
+9.  **One-Tap Incident Reporting**: Emergency interface for drivers to report breakdowns or accidents, instantly sharing GPS and telemetry with Dispatch.
+10. **Interactive Dock Management**: Visual drag-and-drop planning for warehouse loading docks to optimize turnaround time.
+11. **Multi-Channel Customer Notifications**: Automated tracking updates via SMS and Email with live ETA projection links.
 
 ---
 

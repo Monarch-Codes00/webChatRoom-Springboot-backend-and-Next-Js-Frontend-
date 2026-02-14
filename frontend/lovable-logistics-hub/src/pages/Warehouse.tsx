@@ -1,3 +1,4 @@
+// Warehouse Interactive Dock Management Page
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Box, Truck, Clock, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";

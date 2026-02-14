@@ -15,7 +15,7 @@ import SustainabilityPage from "./pages/Sustainability";
 import CompliancePage from "./pages/Compliance";
 import SettingsPage from "./pages/Settings";
 import DriverDashboard from "./pages/DriverDashboard";
-import WarehousePage from "./pages/Warehouse";
+import WarehousePage from "@/pages/Warehouse";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

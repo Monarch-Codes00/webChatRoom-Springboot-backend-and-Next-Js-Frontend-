@@ -8,6 +8,18 @@ import { KpiCardSkeleton, ChartSkeleton, EsgScoreSkeleton } from "@/components/D
 import { useQuery } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload) return null;
+  return (
+    <div className="glass-card p-3 border border-border text-xs space-y-1">
+      <p className="font-medium text-foreground">{label}</p>
+      {payload.map((e: any, i: number) => (
+        <p key={i} style={{ color: e.color }}>{e.name}: <span className="font-mono">{e.value} tons</span></p>
+      ))}
+    </div>
+  );
+};
+
 const SustainabilityPage = () => {
   const { data: susData, isLoading } = useQuery({
     queryKey: ["sustainability"],
@@ -131,31 +143,33 @@ const SustainabilityPage = () => {
         </div>
 
         <div className="space-y-3">
-          {[
-            { rank: 1, driver: "M. Rodriguez", score: 98, savings: "142L", badges: ["Eco-Master", "Top Saver"] },
-            { rank: 2, driver: "A. Chen", score: 94, savings: "128L", badges: ["Eco-Pro"] },
-            { rank: 3, driver: "K. Johnson", score: 89, savings: "115L", badges: ["Steady Hand"] },
-          ].map((driver) => (
-            <div key={driver.driver} className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border/50 group hover:border-primary/50 transition-all">
-              <div className="flex items-center gap-4">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold font-mono text-sm ${driver.rank === 1 ? 'bg-amber-500/20 text-amber-500' : 'bg-secondary text-muted-foreground'}`}>
-                  {driver.rank}
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{driver.driver}</p>
-                  <div className="flex gap-1.5 mt-0.5">
-                    {driver.badges.map(b => (
-                      <span key={b} className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">{b}</span>
-                    ))}
+          {leaderboard.length > 0 ? (
+            leaderboard.map((driver: any) => (
+              <div key={driver.driver || driver.id} className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border/50 group hover:border-primary/50 transition-all">
+                <div className="flex items-center gap-4">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold font-mono text-sm ${driver.rank === 1 ? 'bg-amber-500/20 text-amber-500' : 'bg-secondary text-muted-foreground'}`}>
+                    {driver.rank}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{driver.driver}</p>
+                    <div className="flex gap-1.5 mt-0.5">
+                      {(driver.badges || []).map((b: string) => (
+                        <span key={b} className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">{b}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold font-mono text-success">{driver.score < 90 ? driver.score : "A+"}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">Score • {driver.savings} Saved</p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-lg font-bold font-mono text-success">{driver.score < 90 ? driver.score : "A+"}</p>
-                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">Score • {driver.savings} Saved</p>
-              </div>
+            ))
+          ) : (
+            <div className="p-8 text-center text-muted-foreground border border-dashed rounded-xl">
+              No leaderboard data available. Sync with telematics to start tracking.
             </div>
-          ))}
+          )}
         </div>
       </motion.div>
     </DashboardLayout>

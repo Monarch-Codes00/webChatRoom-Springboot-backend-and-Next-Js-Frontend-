@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Truck, Navigation, Layers, AlertTriangle } from "lucide-react";
+import { Truck, Navigation, Layers } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { MapSkeleton, MapVehicleListSkeleton } from "@/components/DashboardSkeletons";
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
@@ -26,7 +26,13 @@ const vehicles = [
 
 const MapPage = () => {
   const [loading, setLoading] = useState(true);
-  useEffect(() => { const t = setTimeout(() => setLoading(false), 1200); return () => clearTimeout(t); }, []);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   if (loading) {
     return (
@@ -62,44 +68,32 @@ const MapPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* Map Area */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }} 
-          animate={{ opacity: 1, scale: 1 }} 
-          className="lg:col-span-3 glass-card relative overflow-hidden bg-muted/20 border-border/50" 
-          style={{ height: 600 }}
-        >
-          {typeof window !== 'undefined' ? (
+        <div className="lg:col-span-3 glass-card relative overflow-hidden bg-muted/20 border-border/50" style={{ height: 600 }}>
+          {mounted && (
             <MapContainer 
-            center={[37.0902, -95.7129]} 
-            zoom={4} 
-            scrollWheelZoom={true} 
-            className="w-full h-full z-10"
-            zoomControl={false}
-          >
-            {/* Using CartoDB Dark Matter tiles for premium look */}
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            />
-            
-            <ZoomControl position="bottomright" />
-
-            {vehicles.map((v) => (
-              <Marker key={v.id} position={v.position as [number, number]}>
-                <Popup>
-                  <div className="p-2">
-                    <p className="font-bold text-primary">{v.id}</p>
-                    <p className="text-xs">{v.name}</p>
-                    <p className="text-[10px] text-muted-foreground mt-1">Driver: {v.driver}</p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-slate-950">
-              <p className="text-sm text-muted-foreground animate-pulse">Initializing GIS Interface...</p>
-            </div>
+              center={[37.0902, -95.7129]} 
+              zoom={4} 
+              scrollWheelZoom={true} 
+              className="w-full h-full z-10"
+              zoomControl={false}
+            >
+              <TileLayer
+                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution="&copy; OpenStreetMap contributors"
+              />
+              <ZoomControl position="bottomright" />
+              {vehicles.map((v) => (
+                <Marker key={v.id} position={v.position as [number, number]}>
+                  <Popup>
+                    <div className="p-2">
+                      <p className="font-bold text-primary">{v.id}</p>
+                      <p className="text-xs">{v.name}</p>
+                      <p className="text-[10px] text-muted-foreground mt-1">Driver: {v.driver}</p>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
           )}
 
           {/* Map Status Overlays */}
@@ -111,7 +105,7 @@ const MapPage = () => {
               OpenStreetMap Active
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Vehicle list sidebar */}
         <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
@@ -122,7 +116,6 @@ const MapPage = () => {
               initial={{ opacity: 0, x: 20 }} 
               animate={{ opacity: 1, x: 0 }} 
               transition={{ delay: 0.1 + i * 0.05 }} 
-              whileHover={{ scale: 1.02, x: -4 }} 
               className="glass-card p-4 hover:border-primary/40 transition-all duration-200 cursor-pointer group shadow-sm bg-card/30"
             >
               <div className="flex items-center justify-between mb-2">

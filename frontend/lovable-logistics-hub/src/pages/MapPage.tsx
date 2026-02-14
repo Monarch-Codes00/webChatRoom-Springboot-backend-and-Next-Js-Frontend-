@@ -8,12 +8,9 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 // Fix for default Leaflet marker icons in Vite
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
 const DefaultIcon = L.icon({
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
@@ -69,9 +66,10 @@ const MapPage = () => {
           initial={{ opacity: 0, scale: 0.98 }} 
           animate={{ opacity: 1, scale: 1 }} 
           className="lg:col-span-3 glass-card relative overflow-hidden bg-muted/20 border-border/50" 
-          style={{ minHeight: 600 }}
+          style={{ height: 600 }}
         >
-          <MapContainer 
+          {typeof window !== 'undefined' ? (
+            <MapContainer 
             center={[37.0902, -95.7129]} 
             zoom={4} 
             scrollWheelZoom={true} 
@@ -98,6 +96,11 @@ const MapPage = () => {
               </Marker>
             ))}
           </MapContainer>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-slate-950">
+              <p className="text-sm text-muted-foreground animate-pulse">Initializing GIS Interface...</p>
+            </div>
+          )}
 
           {/* Map Status Overlays */}
           <div className="absolute top-4 left-4 flex gap-2 z-[1000]">

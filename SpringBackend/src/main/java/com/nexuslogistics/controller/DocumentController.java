@@ -20,7 +20,7 @@ public class DocumentController {
 
     @GetMapping("/waybill/{shipmentId}")
     public ResponseEntity<Waybill> getWaybill(@PathVariable Long shipmentId) {
-        Shipment shipment = shipmentService.getShipmentById(shipmentId);
+        Shipment shipment = shipmentService.getShipmentById(shipmentId).orElse(null);
         if (shipment == null) {
             return ResponseEntity.notFound().build();
         }

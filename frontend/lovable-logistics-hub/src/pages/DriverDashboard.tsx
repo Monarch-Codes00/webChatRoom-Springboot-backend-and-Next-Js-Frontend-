@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Truck, MapPin, Package, CheckCircle2, Navigation, ClipboardList, Camera, AlertTriangle, ShieldAlert } from "lucide-react";
+import { Truck, MapPin, Package, CheckCircle2, Navigation, ClipboardList, Camera, AlertTriangle, ShieldAlert, Activity, FileText } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -88,6 +88,76 @@ const DriverDashboard = () => {
           START NAVIGATION
         </button>
       </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* OBD-II Health Card */}
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="glass-card p-5 bg-slate-900/50"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Activity className="w-5 h-5 text-success" />
+            <h3 className="text-sm font-bold text-foreground">OBD-II Live Health</h3>
+          </div>
+          <div className="space-y-4">
+            {[
+              { label: "Engine Temp", value: "92°C", color: "bg-success", level: 60 },
+              { label: "Oil Pressure", value: "45 PSI", color: "bg-primary", level: 45 },
+              { label: "Battery", value: "14.2V", color: "bg-success", level: 85 },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-muted-foreground">{stat.label}</span>
+                  <span className="font-bold text-foreground font-mono">{stat.value}</span>
+                </div>
+                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }} 
+                    animate={{ width: `${stat.level}%` }} 
+                    className={`h-full ${stat.color}`} 
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Digital Waybill Card */}
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="glass-card p-5 border-l-4 border-l-primary"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <FileText className="w-5 h-5 text-primary" />
+              <h3 className="text-sm font-bold text-foreground">Digital Waybill</h3>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center p-2 bg-muted/20 rounded">
+              <span className="text-[10px] text-muted-foreground uppercase font-bold">WB Number</span>
+              <span className="text-xs font-mono font-bold">WB-8829-NX</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-2 bg-muted/20 rounded text-center">
+                <p className="text-[8px] text-muted-foreground uppercase font-bold">Weight</p>
+                <p className="text-xs font-bold">14.5T</p>
+              </div>
+              <div className="p-2 bg-muted/20 rounded text-center">
+                <p className="text-[8px] text-muted-foreground uppercase font-bold">Type</p>
+                <p className="text-xs font-bold">Medical</p>
+              </div>
+            </div>
+            <button className="w-full py-2 text-[10px] text-primary hover:bg-primary/5 rounded border border-primary/20 font-bold uppercase tracking-wider">
+              Download PDF Manifest
+            </button>
+          </div>
+        </motion.div>
+      </div>
 
       {/* Proof of Delivery Section (Smart Feature) */}
       <div className="space-y-4">

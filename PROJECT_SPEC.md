@@ -29,6 +29,8 @@ NexusLogistics is a state-of-the-art platform designed to revolutionize shipment
 9.  **One-Tap Incident Reporting**: Emergency interface for drivers to report breakdowns or accidents, instantly sharing GPS and telemetry with Dispatch.
 10. **Interactive Dock Management**: Visual drag-and-drop planning for warehouse loading docks to optimize turnaround time.
 11. **Multi-Channel Customer Notifications**: Automated tracking updates via SMS and Email with live ETA projection links.
+12. **Fuel Efficiency Leaderboard**: Gamified rewards system to encourage eco-friendly driving across the fleet.
+13. **Mobile Vehicle Diagnostics (OBD-II)**: Live engine health data and fault code explanations directly in the Driver Portal.
 
 ---
 

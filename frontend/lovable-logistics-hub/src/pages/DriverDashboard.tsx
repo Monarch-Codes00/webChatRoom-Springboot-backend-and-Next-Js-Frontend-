@@ -1,9 +1,23 @@
 import { motion } from "framer-motion";
-import { Truck, MapPin, Package, CheckCircle2, Navigation, ClipboardList, Camera } from "lucide-react";
+import { Truck, MapPin, Package, CheckCircle2, Navigation, ClipboardList, Camera, AlertTriangle, ShieldAlert } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const DriverDashboard = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [isReportingIncident, setIsReportingIncident] = useState(false);
+
+  const handleIncidentReport = () => {
+    setIsReportingIncident(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsReportingIncident(false);
+      toast.error("INCIDENT REPORTED", {
+        description: "Emergency dispatch and your supervisor have been notified. Stay with the vehicle.",
+        duration: 10000,
+      });
+    }, 1500);
+  };
 
   const shipment = {
     id: "SHP-10293",
@@ -18,11 +32,21 @@ const DriverDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Driver Portal</h1>
-          <p className="text-muted-foreground text-sm">Vehicle: VH-001 (Freightliner)</p>
+          <h1 className="text-2xl font-bold tracking-tight">Driver Portal</h1>
+          <p className="text-muted-foreground text-sm">Vehicle: <span className="text-foreground font-mono font-bold">VH-001</span></p>
         </div>
-        <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-          <Truck className="w-6 h-6 text-primary" />
+        <div className="flex gap-3">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleIncidentReport}
+            className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all shadow-lg ${isReportingIncident ? 'bg-destructive animate-pulse' : 'bg-destructive/10 border-destructive/20 text-destructive'}`}
+          >
+            <ShieldAlert className="w-6 h-6" />
+          </motion.button>
+          <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shadow-lg">
+            <Truck className="w-6 h-6 text-primary" />
+          </div>
         </div>
       </div>
 

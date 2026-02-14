@@ -49,8 +49,8 @@ const AnimatedRoutes = () => {
   );
 };
 
-const App = () => (
-  <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY || "pk_test_placeholder"}>
+const App = () => {
+  const content = (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
@@ -60,7 +60,17 @@ const App = () => (
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
-  </ClerkProvider>
-);
+  );
+
+  if (!CLERK_PUBLISHABLE_KEY || CLERK_PUBLISHABLE_KEY === "pk_test_placeholder") {
+    return content;
+  }
+
+  return (
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+      {content}
+    </ClerkProvider>
+  );
+};
 
 export default App;

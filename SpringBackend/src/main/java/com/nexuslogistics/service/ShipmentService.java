@@ -14,6 +14,9 @@ public class ShipmentService {
     @Autowired
     private ShipmentRepository shipmentRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<Shipment> getAllShipments() {
         return shipmentRepository.findAll();
     }
@@ -34,6 +37,7 @@ public class ShipmentService {
         shipmentRepository.findById(id).ifPresent(shipment -> {
             shipment.setStatus(status);
             shipmentRepository.save(shipment);
+            notificationService.sendTrackingUpdate(shipment);
         });
     }
 

@@ -16,12 +16,14 @@ import {
   Fuel,
   Leaf,
   UserCircle,
-  LogOut
+  LogOut,
+  Box
 } from "lucide-react";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Truck, label: "Fleet", path: "/fleet" },
+  { icon: Box, label: "Warehouse", path: "/warehouse" },
   { icon: Package, label: "Shipments", path: "/shipments" },
   { icon: Map, label: "Live Map", path: "/map" },
   { icon: BarChart3, label: "Analytics", path: "/analytics" },

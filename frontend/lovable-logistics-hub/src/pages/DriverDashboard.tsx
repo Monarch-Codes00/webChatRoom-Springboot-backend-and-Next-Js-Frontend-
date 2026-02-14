@@ -3,9 +3,34 @@ import { Truck, MapPin, Package, CheckCircle2, Navigation, ClipboardList, Camera
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
+
 const DriverDashboard = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isReportingIncident, setIsReportingIncident] = useState(false);
+
+  const { data: shipment, isLoading } = useQuery({
+    queryKey: ["current-shipment"],
+    queryFn: async () => {
+      const resp = await apiService.getShipments();
+      // For demo, just pick the first one
+      return resp.data?.[0] || {
+        id: "—",
+        destination: "No active mission",
+        recipient: "—",
+        status: "idle",
+        items: "—",
+      };
+    },
+    initialData: {
+      id: "—",
+      destination: "Loading mission...",
+      recipient: "—",
+      status: "idle",
+      items: "—",
+    }
+  });
 
   const handleIncidentReport = () => {
     setIsReportingIncident(true);
@@ -19,13 +44,9 @@ const DriverDashboard = () => {
     }, 1500);
   };
 
-  const shipment = {
-    id: "SHP-10293",
-    destination: "123 Logistics St, San Francisco, CA",
-    recipient: "Acme Corp Warehouse",
-    status: "in-transit",
-    items: "12x Industrial Pallets",
-  };
+  if (isLoading) {
+    return <div className="min-h-screen bg-background flex items-center justify-center font-mono text-primary animate-pulse">SYNCING WITH TELEMATICS...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-background p-4 pb-24 md:p-8 flex flex-col gap-6">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Leaf, TrendingDown, Fuel, Route, BarChart3, Zap } from "lucide-react";
+import { Leaf, TrendingDown, Fuel, Route, BarChart3, Zap, Trophy, UserCheck } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import DashboardLayout from "@/components/DashboardLayout";
 import { KpiCardSkeleton, ChartSkeleton, EsgScoreSkeleton } from "@/components/DashboardSkeletons";

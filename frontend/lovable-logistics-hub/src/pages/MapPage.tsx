@@ -16,25 +16,27 @@ const DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const vehicles = [
-  { id: "VH-001", name: "Freightliner Cascadia", driver: "M. Rodriguez", position: [35.08, -106.65], speed: 62, status: "active", heading: "E" },
-  { id: "VH-002", name: "Kenworth T680", driver: "K. Johnson", position: [29.76, -95.37], speed: 58, status: "active", heading: "SE" },
-  { id: "VH-005", name: "Mack Anthem", driver: "J. Williams", position: [32.08, -81.09], speed: 55, status: "active", heading: "S" },
-  { id: "VH-006", name: "International LT", driver: "D. Martinez", position: [41.88, -87.63], speed: 61, status: "active", heading: "SW" },
-  { id: "VH-008", name: "DAF XF", driver: "S. Patel", position: [33.45, -112.07], speed: 65, status: "active", heading: "N" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
 
 const MapPage = () => {
-  const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const { data: vehiclesData, isLoading } = useQuery({
+    queryKey: ["vehicles"],
+    queryFn: async () => {
+      const resp = await apiService.getVehicles();
+      return resp.data;
+    },
+    initialData: [],
+  });
+
+  const vehicles = Array.isArray(vehiclesData) ? vehiclesData : [];
 
   useEffect(() => {
     setMounted(true);
-    const t = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(t);
   }, []);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <DashboardLayout>
         <div>

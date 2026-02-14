@@ -122,24 +122,44 @@ const SustainabilityPage = () => {
         </motion.div>
       </div>
 
-      {/* ESG Summary */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="glass-card p-5">
-        <h3 className="text-sm font-semibold text-foreground mb-4">ESG Score Summary</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Fuel Efficiency Leaderboard (Smart Feature) */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="glass-card p-5">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-amber-500" /> Fuel Efficiency Leaderboard
+            </h3>
+            <p className="text-xs text-muted-foreground mt-1">Top performing drivers this month based on eco-score</p>
+          </div>
+          <button className="px-3 py-1.5 rounded-lg bg-secondary text-xs font-bold text-muted-foreground hover:text-foreground transition-colors">
+            View Analytics
+          </button>
+        </div>
+
+        <div className="space-y-3">
           {[
-            { label: "Environmental", score: 82, target: 85, color: "kpi-gradient-green" },
-            { label: "Social", score: 78, target: 80, color: "kpi-gradient-blue" },
-            { label: "Governance", score: 91, target: 90, color: "kpi-gradient-amber" },
-          ].map((e) => (
-            <div key={e.label} className="p-4 rounded-lg bg-secondary/30 border border-border/50">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-foreground">{e.label}</span>
-                <span className="text-lg font-bold font-mono text-foreground">{e.score}</span>
+            { rank: 1, driver: "M. Rodriguez", score: 98, savings: "142L", badges: ["Eco-Master", "Top Saver"] },
+            { rank: 2, driver: "A. Chen", score: 94, savings: "128L", badges: ["Eco-Pro"] },
+            { rank: 3, driver: "K. Johnson", score: 89, savings: "115L", badges: ["Steady Hand"] },
+          ].map((driver) => (
+            <div key={driver.driver} className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border/50 group hover:border-primary/50 transition-all">
+              <div className="flex items-center gap-4">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold font-mono text-sm ${driver.rank === 1 ? 'bg-amber-500/20 text-amber-500' : 'bg-secondary text-muted-foreground'}`}>
+                  {driver.rank}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{driver.driver}</p>
+                  <div className="flex gap-1.5 mt-0.5">
+                    {driver.badges.map(b => (
+                      <span key={b} className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">{b}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="w-full h-2 rounded-full bg-secondary">
-                <motion.div initial={{ width: 0 }} animate={{ width: `${e.score}%` }} transition={{ duration: 1, delay: 0.8 }} className={`h-full rounded-full ${e.color}`} />
+              <div className="text-right">
+                <p className="text-lg font-bold font-mono text-success">{driver.score < 90 ? driver.score : "A+"}</p>
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">Score • {driver.savings} Saved</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Target: {e.target}</p>
             </div>
           ))}
         </div>

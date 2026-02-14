@@ -14,19 +14,34 @@ import {
   SmallWidgetSkeleton,
 } from "@/components/DashboardSkeletons";
 
-const Index = () => {
-  const [loading, setLoading] = useState(true);
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(timer);
-  }, []);
+const Index = () => {
+  const { data: metrics, isLoading } = useQuery({
+    queryKey: ["dashboard-metrics"],
+    queryFn: async () => {
+      // Return default empty state for now
+      return {
+        activeShipments: "0",
+        fleetVehicles: "0",
+        onTimeDelivery: "0%",
+        revenue: "$0.0M"
+      };
+    },
+    initialData: {
+      activeShipments: "0",
+      fleetVehicles: "0",
+      onTimeDelivery: "0%",
+      revenue: "$0.0M"
+    }
+  });
 
   return (
     <DashboardLayout>
       {/* KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {loading ? (
+        {isLoading ? (
           <>
             <KpiCardSkeleton />
             <KpiCardSkeleton />
@@ -35,10 +50,10 @@ const Index = () => {
           </>
         ) : (
           <>
-            <KpiCard title="Active Shipments" value="1,284" change="+12.5% from last week" changeType="positive" icon={Package} gradient="blue" delay={0} />
-            <KpiCard title="Fleet Vehicles" value="186" change="4 in maintenance" changeType="neutral" icon={Truck} gradient="green" delay={0.1} />
-            <KpiCard title="On-Time Delivery" value="94.7%" change="+2.3% improvement" changeType="positive" icon={Clock} gradient="amber" delay={0.2} />
-            <KpiCard title="Revenue (MTD)" value="$2.4M" change="-3.1% vs target" changeType="negative" icon={DollarSign} gradient="red" delay={0.3} />
+            <KpiCard title="Active Shipments" value={metrics.activeShipments} change="+0% from last week" changeType="neutral" icon={Package} gradient="blue" delay={0} />
+            <KpiCard title="Fleet Vehicles" value={metrics.fleetVehicles} change="0 in maintenance" changeType="neutral" icon={Truck} gradient="green" delay={0.1} />
+            <KpiCard title="On-Time Delivery" value={metrics.onTimeDelivery} change="+0% improvement" changeType="neutral" icon={Clock} gradient="amber" delay={0.2} />
+            <KpiCard title="Revenue (MTD)" value={metrics.revenue} change="+0% vs target" changeType="neutral" icon={DollarSign} gradient="red" delay={0.3} />
           </>
         )}
       </div>
@@ -61,10 +76,10 @@ const Index = () => {
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
-          {loading ? <TableSkeleton /> : <ShipmentTable />}
+          {isLoading ? <TableSkeleton /> : <ShipmentTable />}
         </div>
         <div className="space-y-4">
-          {loading ? (
+          {isLoading ? (
             <>
               <VehicleStatusSkeleton />
               <SmallWidgetSkeleton />

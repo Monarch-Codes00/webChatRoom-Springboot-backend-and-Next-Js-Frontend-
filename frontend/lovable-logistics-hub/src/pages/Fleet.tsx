@@ -7,6 +7,20 @@ import { KpiCardSkeleton, FleetCardSkeleton } from "@/components/DashboardSkelet
 import { useQuery } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
 
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiService } from "@/services/apiService";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+
 const statusConfig: Record<string, { label: string; class: string; icon: any }> = {
   active: { label: "Active", class: "text-success bg-success/10 border-success/20", icon: CheckCircle },
   idle: { label: "Idle", class: "text-warning bg-warning/10 border-warning/20", icon: AlertTriangle },
@@ -14,6 +28,23 @@ const statusConfig: Record<string, { label: string; class: string; icon: any }> 
 };
 
 const FleetPage = () => {
+  const queryClient = useQueryClient();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newVehicle, setNewVehicle] = useState({
+    id: `VH-${Math.floor(Math.random() * 1000)}`,
+    name: "",
+    plate: "",
+    status: "active",
+    fuel: 100,
+    mileage: "0 mi",
+    lastService: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+    nextService: "—",
+    driver: "Unassigned",
+    location: "Main Yard",
+    speed: 0,
+    temp: 20.0
+  });
+
   const { data: fleetData, isLoading } = useQuery({
     queryKey: ["fleet"],
     queryFn: async () => {
@@ -21,6 +52,32 @@ const FleetPage = () => {
       return resp.data;
     },
     initialData: [],
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data: any) => apiService.createVehicle(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["fleet"] });
+      toast.success("Vehicle added to fleet");
+      setIsDialogOpen(false);
+      setNewVehicle({
+        id: `VH-${Math.floor(Math.random() * 1000)}`,
+        name: "",
+        plate: "",
+        status: "active",
+        fuel: 100,
+        mileage: "0 mi",
+        lastService: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+        nextService: "—",
+        driver: "Unassigned",
+        location: "Main Yard",
+        speed: 0,
+        temp: 20.0
+      });
+    },
+    onError: () => {
+      toast.error("Failed to add vehicle. Check backend connection.");
+    }
   });
 
   const fleet = Array.isArray(fleetData) ? fleetData : [];
@@ -48,9 +105,66 @@ const FleetPage = () => {
 
   return (
     <DashboardLayout>
-      <div>
-        <h2 className="text-xl font-bold text-foreground">Fleet Management</h2>
-        <p className="text-sm text-muted-foreground">Monitor and manage all vehicles in your fleet</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-foreground">Fleet Management</h2>
+          <p className="text-sm text-muted-foreground">Monitor and manage all vehicles in your fleet</p>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity">
+              + Add Vehicle
+            </button>
+          </DialogTrigger>
+          <DialogContent className="glass-card border-border/50 max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">Add New Fleet Asset</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-xs uppercase font-bold text-muted-foreground">Vehicle Model / Name</Label>
+                <Input 
+                  id="name" 
+                  placeholder="e.g. Freightliner Cascadia" 
+                  className="bg-secondary/50 border-border/50"
+                  value={newVehicle.name}
+                  onChange={(e) => setNewVehicle({...newVehicle, name: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="plate" className="text-xs uppercase font-bold text-muted-foreground">License Plate</Label>
+                <Input 
+                  id="plate" 
+                  placeholder="e.g. CA-7842-XL" 
+                  className="bg-secondary/50 border-border/50 font-mono"
+                  value={newVehicle.plate}
+                  onChange={(e) => setNewVehicle({...newVehicle, plate: e.target.value})}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="id" className="text-xs uppercase font-bold text-muted-foreground">Asset ID</Label>
+                  <Input id="id" value={newVehicle.id} readOnly className="bg-muted/50 font-mono text-xs opacity-70" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs uppercase font-bold text-muted-foreground">Initial Status</Label>
+                  <div className="h-10 px-3 flex items-center bg-muted/50 rounded-md border border-border/50 text-xs font-bold text-success">
+                    ACTIVE
+                  </div>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <button 
+                onClick={() => createMutation.mutate(newVehicle)}
+                disabled={createMutation.isPending || !newVehicle.name || !newVehicle.plate}
+                className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 disabled:opacity-50 transition-all"
+              >
+                {createMutation.isPending ? "ADDING ASSET..." : "ADD TO FLEET DATABASE"}
+              </button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Summary */}

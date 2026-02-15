@@ -5,10 +5,29 @@ import { Box, Truck, Clock, ArrowRight, AlertCircle, CheckCircle2 } from "lucide
 import DashboardLayout from "@/components/DashboardLayout";
 import { KpiCardSkeleton } from "@/components/DashboardSkeletons";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const WarehousePage = () => {
+  const queryClient = useQueryClient();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [reservation, setReservation] = useState({ 
+    dockId: 1, 
+    vehicleNumber: "", 
+    status: "Occupied" 
+  });
+
   const { data: docksData, isLoading } = useQuery({
     queryKey: ["docks"],
     queryFn: async () => {
@@ -16,6 +35,15 @@ const WarehousePage = () => {
       return resp.data;
     },
     initialData: [],
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (data: any) => apiService.updateDockStatus(data.dockId, data.status, data.vehicleNumber),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["docks"] });
+      toast.success(`Dock ${reservation.dockId} updated successfully`);
+      setIsDialogOpen(false);
+    }
   });
 
   const docks = Array.isArray(docksData) ? docksData : [];
@@ -42,7 +70,52 @@ const WarehousePage = () => {
         </div>
         <div className="flex gap-2">
           <button className="px-3 py-1.5 rounded-lg bg-secondary text-xs font-bold text-muted-foreground hover:text-foreground">Bay Mapping</button>
-          <button className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90">+ Reserve Dock</button>
+          
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <button className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity">
+                + Reserve Dock
+              </button>
+            </DialogTrigger>
+            <DialogContent className="glass-card border-border/50 max-w-sm">
+              <DialogHeader>
+                <DialogTitle className="text-xl font-bold">Assign Vehicle to Dock</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="dock" className="text-xs uppercase font-bold text-muted-foreground">Select Dock</Label>
+                  <select 
+                    id="dock" 
+                    className="w-full h-10 px-3 bg-secondary/50 border border-border/50 rounded-md text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    value={reservation.dockId}
+                    onChange={(e) => setReservation({...reservation, dockId: parseInt(e.target.value)})}
+                  >
+                    {docks.map((d: any) => (
+                      <option key={d.id} value={d.id}>{d.name} ({d.status})</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="vehicle" className="text-xs uppercase font-bold text-muted-foreground">Vehicle Number</Label>
+                  <Input 
+                    id="vehicle" 
+                    placeholder="e.g. VH-001" 
+                    className="bg-secondary/50 border-border/50"
+                    value={reservation.vehicleNumber}
+                    onChange={(e) => setReservation({...reservation, vehicleNumber: e.target.value})}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <button 
+                  onClick={() => updateMutation.mutate(reservation)}
+                  className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all"
+                >
+                  CONFIRM ASSIGNMENT
+                </button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 

@@ -39,9 +39,9 @@ const WarehousePage = () => {
 
   const updateMutation = useMutation({
     mutationFn: (data: any) => apiService.updateDockStatus(data.dockId, data.status, data.vehicleNumber),
-    onSuccess: () => {
+    onSuccess: (resp, variables) => {
       queryClient.invalidateQueries({ queryKey: ["docks"] });
-      toast.success(`Dock ${reservation.dockId} updated successfully`);
+      toast.success(variables.status === 'Available' ? `Dock released` : `Dock ${variables.dockId} updated`);
       setIsDialogOpen(false);
     }
   });
@@ -120,13 +120,13 @@ const WarehousePage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {docks.map((dock, i) => (
+        {docks.map((dock: any, i: number) => (
           <motion.div 
             key={dock.id}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.05 }}
-            className={`glass-card p-5 group hover:border-primary/40 transition-all cursor-move border-t-4 ${
+            className={`glass-card p-5 group hover:border-primary/40 transition-all border-t-4 ${
               dock.status === 'Occupied' ? 'border-primary' : 
               dock.status === 'Available' ? 'border-success' : 
               dock.status === 'Maintenance' ? 'border-destructive' : 'border-warning'
@@ -153,10 +153,10 @@ const WarehousePage = () => {
                     <div className="flex items-center gap-1.5 text-xs text-foreground font-bold">
                       <Truck className="w-3.5 h-3.5" /> {dock.vehicle}
                     </div>
-                    <span className="text-[10px] text-primary font-mono font-bold animate-pulse">{dock.active}...</span>
+                    <span className="text-[10px] text-primary font-mono font-bold animate-pulse">{dock.active || 'Active'}...</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                    <Clock className="w-3 h-3" /> Turnaround: <span className="text-foreground font-bold">{dock.tt} left</span>
+                    <Clock className="w-3 h-3" /> Turnaround: <span className="text-foreground font-bold">{dock.tt || '10m'} left</span>
                   </div>
                 </div>
                 <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -166,6 +166,12 @@ const WarehousePage = () => {
                     className="h-full bg-primary" 
                   />
                 </div>
+                <button 
+                  onClick={() => updateMutation.mutate({ dockId: dock.id, status: 'Available', vehicleNumber: "" })}
+                  className="w-full py-1.5 mt-2 rounded-md bg-secondary text-[10px] font-bold text-muted-foreground hover:text-destructive transition-colors uppercase tracking-widest"
+                >
+                  Release Dock
+                </button>
               </div>
             ) : (
               <div className="h-[92px] flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg group-hover:border-primary/30 transition-colors">
@@ -173,22 +179,41 @@ const WarehousePage = () => {
                   {dock.status === 'Maintenance' ? 'Maintenance Cycle' : 'Ready for Dispatch'}
                 </p>
                 {dock.status === 'Available' && (
-                  <button className="mt-2 text-[10px] text-primary font-bold hover:underline">DRAG VEHICLE HERE</button>
+                  <button 
+                    onClick={() => {
+                      setReservation({ ...reservation, dockId: dock.id });
+                      setIsDialogOpen(true);
+                    }}
+                    className="mt-2 text-[10px] text-primary font-bold hover:underline"
+                  >
+                    ASSIGN VEHICLE
+                  </button>
                 )}
               </div>
             )}
 
             <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between">
               <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Bays: {dock.type}</span>
-              <button className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground">
-                <ArrowRight className="w-3 h-3" />
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => {
+                    const nextStatus = dock.status === 'Maintenance' ? 'Available' : 'Maintenance';
+                    updateMutation.mutate({ dockId: dock.id, status: nextStatus, vehicleNumber: "" });
+                  }}
+                  className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground"
+                  title="Toggle Maintenance"
+                >
+                  <AlertCircle className="w-3 h-3" />
+                </button>
+                <button className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground">
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Yard Summary Footer */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Package, MapPin, ArrowRight, Clock, Search, Filter, ChevronDown, Bell } from "lucide-react";
+import { Package, MapPin, ArrowRight, Clock, Search, Filter, ChevronDown, Bell, Edit, Trash2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { ShipmentsTableSkeleton, KpiCardSkeleton } from "@/components/DashboardSkeletons";
 import { toast } from "sonner";

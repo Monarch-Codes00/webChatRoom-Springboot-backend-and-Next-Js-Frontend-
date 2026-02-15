@@ -22,7 +22,12 @@ export const apiService = {
 
   // Create Operations
   createVehicle: (data: any) => api.post("/vehicles", data),
+  updateVehicle: (id: string | number, data: any) => api.put(`/vehicles/${id}`, data),
+  deleteVehicle: (id: string | number) => api.delete(`/vehicles/${id}`),
+  
   createShipment: (data: any) => api.post("/shipments", data),
+  updateShipment: (id: string | number, data: any) => api.put(`/shipments/${id}`, data),
+  deleteShipment: (id: string | number) => api.delete(`/shipments/${id}`),
 
   // Sustainability & Analytics
   getLeaderboard: () => api.get("/leaderboard"),

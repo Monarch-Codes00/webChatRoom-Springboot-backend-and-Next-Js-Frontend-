@@ -16,8 +16,12 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
+import { useUser } from "@clerk/clerk-react";
 
 const Index = () => {
+  const { user } = useUser();
+  const role = (user?.publicMetadata?.role as string) || "admin";
+
   const { data: metrics, isLoading } = useQuery({
     queryKey: ["dashboard-metrics"],
     queryFn: async () => {
@@ -51,16 +55,20 @@ const Index = () => {
         ) : (
           <>
             <KpiCard title="Active Shipments" value={metrics.activeShipments} change="+0% from last week" changeType="neutral" icon={Package} gradient="blue" delay={0} />
-            <KpiCard title="Fleet Vehicles" value={metrics.fleetVehicles} change="0 in maintenance" changeType="neutral" icon={Truck} gradient="green" delay={0.1} />
+            {role === "admin" && (
+              <KpiCard title="Fleet Vehicles" value={metrics.fleetVehicles} change="0 in maintenance" changeType="neutral" icon={Truck} gradient="green" delay={0.1} />
+            )}
             <KpiCard title="On-Time Delivery" value={metrics.onTimeDelivery} change="+0% improvement" changeType="neutral" icon={Clock} gradient="amber" delay={0.2} />
-            <KpiCard title="Revenue (MTD)" value={metrics.revenue} change="+0% vs target" changeType="neutral" icon={DollarSign} gradient="red" delay={0.3} />
+            {role === "admin" && (
+              <KpiCard title="Revenue (MTD)" value={metrics.revenue} change="+0% vs target" changeType="neutral" icon={DollarSign} gradient="red" delay={0.3} />
+            )}
           </>
         )}
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {loading ? (
+        {isLoading ? (
           <>
             <ChartSkeleton />
             <ChartSkeleton />
@@ -68,7 +76,7 @@ const Index = () => {
         ) : (
           <>
             <DeliveryChart />
-            <CostChart />
+            {role === "admin" && <CostChart />}
           </>
         )}
       </div>
@@ -86,7 +94,7 @@ const Index = () => {
             </>
           ) : (
             <>
-              <VehicleStatus />
+              {role === "admin" && <VehicleStatus />}
               <SustainabilityWidget />
             </>
           )}

@@ -1,24 +1,30 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { UserButton, SignOutButton } from "@clerk/clerk-react";
+import { useUser, UserButton, SignOutButton } from "@clerk/clerk-react";
 import {
   LayoutDashboard,
   Truck,
+  Box,
   Package,
   Map,
   BarChart3,
+  Fuel,
+  UserCircle,
+  Leaf,
   Shield,
   Settings,
-  Bell,
-  ChevronLeft,
   ChevronRight,
-  Fuel,
-  Leaf,
-  UserCircle,
-  LogOut,
-  Box
+  ChevronLeft
 } from "lucide-react";
+
+type Role = "admin" | "warehouse" | "driver";
+
+const roleAccess: Record<Role, string[]> = {
+  admin: ["/", "/fleet", "/warehouse", "/shipments", "/map", "/analytics", "/telematics", "/sustainability", "/compliance", "/settings", "/driver"],
+  warehouse: ["/", "/warehouse", "/shipments", "/map", "/settings"],
+  driver: ["/driver", "/map", "/settings"]
+};
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -35,8 +41,13 @@ const navItems = [
 ];
 
 const Sidebar = () => {
+  const { user } = useUser();
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+
+  // Get role from Clerk metadata or default to 'admin' for now
+  const role = (user?.publicMetadata?.role as Role) || "admin";
+  const accessibleItems = navItems.filter(item => roleAccess[role]?.includes(item.path));
 
   return (
     <motion.aside
@@ -65,7 +76,7 @@ const Sidebar = () => {
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto scrollbar-thin">
-        {navItems.map((item) => {
+        {accessibleItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <NavLink
@@ -87,7 +98,7 @@ const Sidebar = () => {
                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="truncate"
+                  className="truncate text-[13px] font-medium"
                 >
                   {item.label}
                 </motion.span>
@@ -106,8 +117,10 @@ const Sidebar = () => {
           <UserButton afterSignOutUrl="/" />
           {!collapsed && (
             <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-bold text-foreground truncate">Admin Profile</span>
-              <span className="text-[10px] text-muted-foreground truncate">Dispatch Center A</span>
+              <span className="text-xs font-bold text-foreground truncate">{user?.fullName || "User Profile"}</span>
+              <span className="text-[10px] text-muted-foreground truncate uppercase tracking-widest font-bold">
+                {role} account
+              </span>
             </div>
           )}
         </div>

@@ -20,6 +20,10 @@ export const apiService = {
   updateDockStatus: (id: number, status: string, vehicleNumber?: string) => 
     api.put(`/docks/${id}/status`, null, { params: { status, vehicleNumber } }),
 
+  // Create Operations
+  createVehicle: (data: any) => api.post("/vehicles", data),
+  createShipment: (data: any) => api.post("/shipments", data),
+
   // Sustainability & Analytics
   getLeaderboard: () => api.get("/leaderboard"),
   getSustainabilityMetrics: () => api.get("/sustainability/metrics"),

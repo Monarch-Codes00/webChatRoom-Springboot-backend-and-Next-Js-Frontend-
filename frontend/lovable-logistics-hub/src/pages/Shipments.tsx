@@ -5,8 +5,18 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { ShipmentsTableSkeleton, KpiCardSkeleton } from "@/components/DashboardSkeletons";
 import { toast } from "sonner";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const statusStyles: Record<string, string> = {
   active: "text-success bg-success/10 border-success/20",
@@ -17,6 +27,21 @@ const statusStyles: Record<string, string> = {
 const filters = ["All", "In Transit", "Loading", "Delivered", "Delayed"];
 
 const ShipmentsPage = () => {
+  const queryClient = useQueryClient();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newShipment, setNewShipment] = useState({
+    id: `SHP-${Math.floor(Math.random() * 10000)}`,
+    customer: "",
+    origin: "",
+    destination: "",
+    status: "Loading",
+    statusType: "warning",
+    eta: "Pending",
+    driver: "",
+    weight: "",
+    created: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+  });
+
   const { data: shipmentsData, isLoading } = useQuery({
     queryKey: ["shipments"],
     queryFn: async () => {
@@ -26,6 +51,30 @@ const ShipmentsPage = () => {
     initialData: [],
   });
 
+  const createMutation = useMutation({
+    mutationFn: (data: any) => apiService.createShipment(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shipments"] });
+      toast.success("Shipment created successfully");
+      setIsDialogOpen(false);
+      setNewShipment({
+        id: `SHP-${Math.floor(Math.random() * 10000)}`,
+        customer: "",
+        origin: "",
+        destination: "",
+        status: "Loading",
+        statusType: "warning",
+        eta: "Pending",
+        driver: "",
+        weight: "",
+        created: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+      });
+    },
+    onError: () => {
+      toast.error("Failed to create shipment. Please check backend.");
+    }
+  });
+
   const allShipments = Array.isArray(shipmentsData) ? shipmentsData : [];
 
   const [activeFilter, setActiveFilter] = useState("All");
@@ -33,7 +82,9 @@ const ShipmentsPage = () => {
 
   const filtered = allShipments.filter((s: any) => {
     const matchesFilter = activeFilter === "All" || s.status === activeFilter;
-    const matchesSearch = s.id.toLowerCase().includes(search.toLowerCase()) || s.customer.toLowerCase().includes(search.toLowerCase()) || s.driver.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = s.id.toLowerCase().includes(search.toLowerCase()) || 
+                         (s.customer && s.customer.toLowerCase().includes(search.toLowerCase())) || 
+                         (s.driver && s.driver.toLowerCase().includes(search.toLowerCase()));
     return matchesFilter && matchesSearch;
   });
 
@@ -56,11 +107,91 @@ const ShipmentsPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-foreground">Shipments</h2>
-          <p className="text-sm text-muted-foreground">{allShipments.length} total shipments</p>
+          <p className="text-sm text-muted-foreground">{filtered.length} visible shipments</p>
         </div>
-        <button className="px-4 py-2 rounded-lg kpi-gradient-blue text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity">
-          + New Shipment
-        </button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <button className="px-4 py-2 rounded-lg kpi-gradient-blue text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity">
+              + New Shipment
+            </button>
+          </DialogTrigger>
+          <DialogContent className="glass-card border-border/50 max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">Register New Shipment</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="customer" className="text-xs uppercase font-bold text-muted-foreground">Customer Name</Label>
+                  <Input 
+                    id="customer" 
+                    placeholder="e.g. Acme Corp" 
+                    className="bg-secondary/50 border-border/50"
+                    value={newShipment.customer}
+                    onChange={(e) => setNewShipment({...newShipment, customer: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="driver" className="text-xs uppercase font-bold text-muted-foreground">Assigned Driver</Label>
+                  <Input 
+                    id="driver" 
+                    placeholder="e.g. John Doe" 
+                    className="bg-secondary/50 border-border/50"
+                    value={newShipment.driver}
+                    onChange={(e) => setNewShipment({...newShipment, driver: e.target.value})}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="origin" className="text-xs uppercase font-bold text-muted-foreground">Origin City</Label>
+                  <Input 
+                    id="origin" 
+                    placeholder="e.g. San Jose, CA" 
+                    className="bg-secondary/50 border-border/50"
+                    value={newShipment.origin}
+                    onChange={(e) => setNewShipment({...newShipment, origin: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="destination" className="text-xs uppercase font-bold text-muted-foreground">Destination City</Label>
+                  <Input 
+                    id="destination" 
+                    placeholder="e.g. Austin, TX" 
+                    className="bg-secondary/50 border-border/50"
+                    value={newShipment.destination}
+                    onChange={(e) => setNewShipment({...newShipment, destination: e.target.value})}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="weight" className="text-xs uppercase font-bold text-muted-foreground">Cargo Weight</Label>
+                  <Input 
+                    id="weight" 
+                    placeholder="e.g. 1,200 kg" 
+                    className="bg-secondary/50 border-border/50"
+                    value={newShipment.weight}
+                    onChange={(e) => setNewShipment({...newShipment, weight: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="id" className="text-xs uppercase font-bold text-muted-foreground">Shipment ID</Label>
+                  <Input id="id" value={newShipment.id} readOnly className="bg-muted/50 font-mono text-xs opacity-70" />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <button 
+                onClick={() => createMutation.mutate(newShipment)}
+                disabled={createMutation.isPending || !newShipment.customer}
+                className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              >
+                {createMutation.isPending ? "REGISTERING..." : "CONFIRM SHIPMENT REGISTER"}
+              </button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Filters & Search */}

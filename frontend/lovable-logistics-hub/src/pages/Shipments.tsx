@@ -29,6 +29,8 @@ const filters = ["All", "In Transit", "Loading", "Delivered", "Delayed"];
 const ShipmentsPage = () => {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [currentShipment, setCurrentShipment] = useState<any>(null);
   const [newShipment, setNewShipment] = useState({
     id: `SHP-${Math.floor(Math.random() * 10000)}`,
     customer: "",
@@ -71,7 +73,24 @@ const ShipmentsPage = () => {
       });
     },
     onError: () => {
-      toast.error("Failed to create shipment. Please check backend.");
+      toast.error("Failed to create shipment.");
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (data: any) => apiService.updateShipment(data.id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shipments"] });
+      toast.success("Shipment updated");
+      setIsEditDialogOpen(false);
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string | number) => apiService.deleteShipment(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shipments"] });
+      toast.error("Shipment deleted");
     }
   });
 
@@ -221,8 +240,8 @@ const ShipmentsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((s) => (
-                <tr key={s.id} className="border-b border-border/50 hover:bg-secondary/30 transition-colors cursor-pointer">
+              {filtered.map((s: any) => (
+                <tr key={s.id} className="border-b border-border/50 hover:bg-secondary/30 transition-colors">
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-2">
                       <Package className="w-4 h-4 text-primary" />
@@ -239,8 +258,8 @@ const ShipmentsPage = () => {
                     </div>
                   </td>
                   <td className="px-5 py-3">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${statusStyles[s.statusType]}`}>
-                      <span className={`status-dot status-${s.statusType}`} />
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${statusStyles[s.statusType] || statusStyles.warning}`}>
+                      <span className={`status-dot status-${s.statusType || 'warning'}`} />
                       {s.status}
                     </span>
                   </td>
@@ -254,17 +273,35 @@ const ShipmentsPage = () => {
                   <td className="px-5 py-3 text-sm font-mono text-muted-foreground">{s.weight}</td>
                   <td className="px-5 py-3 text-xs text-muted-foreground">{s.created}</td>
                   <td className="px-5 py-3 text-right">
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toast.success(`MULTICHANNEL BROADCAST SENT`, {
-                          description: `Tracking updates sent to ${s.customer} via SMS, WhatsApp & Email.`,
-                        });
-                      }}
-                      className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-                    >
-                      <Bell className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button 
+                        onClick={() => {
+                          setCurrentShipment(s);
+                          setIsEditDialogOpen(true);
+                        }}
+                        className="p-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary transition-all"
+                      >
+                        <Edit className="w-3.5 h-3.5" />
+                      </button>
+                      <button 
+                        onClick={() => {
+                          if (confirm(`Delete shipment ${s.id}?`)) {
+                            deleteMutation.mutate(s.id);
+                          }
+                        }}
+                        className="p-2 rounded-lg bg-secondary text-muted-foreground hover:text-destructive transition-all"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button 
+                        onClick={() => {
+                          toast.success(`TRACKING SYNCED`, { description: `Updates pushed to client dashboard.` });
+                        }}
+                        className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
+                      >
+                        <Bell className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -272,6 +309,71 @@ const ShipmentsPage = () => {
           </table>
         </div>
       </motion.div>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="glass-card border-border/50 max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Edit Shipment Details</DialogTitle>
+          </DialogHeader>
+          {currentShipment && (
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs uppercase font-bold text-muted-foreground">Customer</Label>
+                  <Input 
+                    value={currentShipment.customer}
+                    onChange={(e) => setCurrentShipment({...currentShipment, customer: e.target.value})}
+                    className="bg-secondary/50 border-border/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs uppercase font-bold text-muted-foreground">Driver</Label>
+                  <Input 
+                    value={currentShipment.driver}
+                    onChange={(e) => setCurrentShipment({...currentShipment, driver: e.target.value})}
+                    className="bg-secondary/50 border-border/50"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs uppercase font-bold text-muted-foreground">Origin</Label>
+                  <Input 
+                    value={currentShipment.origin}
+                    onChange={(e) => setCurrentShipment({...currentShipment, origin: e.target.value})}
+                    className="bg-secondary/50 border-border/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs uppercase font-bold text-muted-foreground">Destination</Label>
+                  <Input 
+                    value={currentShipment.destination}
+                    onChange={(e) => setCurrentShipment({...currentShipment, destination: e.target.value})}
+                    className="bg-secondary/50 border-border/50"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs uppercase font-bold text-muted-foreground">Weight</Label>
+                <Input 
+                  value={currentShipment.weight}
+                  onChange={(e) => setCurrentShipment({...currentShipment, weight: e.target.value})}
+                  className="bg-secondary/50 border-border/50"
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <button 
+              onClick={() => updateMutation.mutate(currentShipment)}
+              className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all"
+            >
+              SAVE UPDATES
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 };

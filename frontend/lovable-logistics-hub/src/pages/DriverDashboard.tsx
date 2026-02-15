@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Truck, MapPin, Package, CheckCircle2, Navigation, ClipboardList, Camera, AlertTriangle, ShieldAlert, Activity, FileText, X } from "lucide-react";
+import { Truck, MapPin, Package, CheckCircle2, Navigation, ClipboardList, Camera, AlertTriangle, ShieldAlert, Activity, FileText, X, Trophy, Leaf } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -253,6 +253,55 @@ const DriverDashboard = () => {
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-foreground">Digital POD</span>
           </button>
         </div>
+      </div>
+
+      {/* Shift Performance Hub */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="glass-card p-5 border-l-4 border-l-success bg-success/5"
+        >
+          <div className="flex items-center justify-between mb-4">
+             <div className="flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-amber-500" />
+                <h3 className="text-sm font-black text-foreground uppercase tracking-tight">Shift Safety Score</h3>
+             </div>
+             <span className="text-xl font-black font-mono text-success">98</span>
+          </div>
+          <div className="space-y-4">
+             <div className="flex justify-between items-center text-[10px] font-bold">
+                <span className="text-muted-foreground uppercase">Harsh Braking</span>
+                <span className="text-success">0 EVENTS</span>
+             </div>
+             <div className="flex justify-between items-center text-[10px] font-bold">
+                <span className="text-muted-foreground uppercase">Speeding Zones</span>
+                <span className="text-success">NO INFRACTIONS</span>
+             </div>
+             <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                <motion.div initial={{ width: 0 }} animate={{ width: "98%" }} className="h-full bg-success" />
+             </div>
+          </div>
+        </motion.div>
+
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="glass-card p-5 border-l-4 border-l-primary bg-primary/5"
+        >
+          <div className="flex items-center justify-between mb-4">
+             <div className="flex items-center gap-2">
+                <Leaf className="w-5 h-5 text-success" />
+                <h3 className="text-sm font-black text-foreground uppercase tracking-tight">Eco-Driving</h3>
+             </div>
+             <div className="px-2 py-0.5 rounded bg-success/20 text-success text-[8px] font-black uppercase">Level 4</div>
+          </div>
+          <p className="text-[10px] text-muted-foreground font-medium mb-3">You've saved <span className="text-foreground font-bold">4.2L</span> of fuel today.</p>
+          <div className="flex gap-2">
+             {[1, 2, 3, 4].map(i => <div key={i} className="w-8 h-8 rounded-lg bg-success/20 flex items-center justify-center text-success"><Leaf className="w-4 h-4" /></div>)}
+             <div className="w-8 h-8 rounded-lg bg-muted/20 border border-dashed border-border flex items-center justify-center text-muted-foreground"><Trophy className="w-4 h-4 opacity-40" /></div>
+          </div>
+        </motion.div>
       </div>
 
       {/* Proof of Delivery Card (e-POD) */}

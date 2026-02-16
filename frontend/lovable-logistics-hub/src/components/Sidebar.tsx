@@ -18,36 +18,29 @@ import {
   ChevronLeft
 } from "lucide-react";
 
-type Role = "admin" | "warehouse" | "driver";
-
-const roleAccess: Record<Role, string[]> = {
-  admin: ["/", "/fleet", "/warehouse", "/shipments", "/map", "/analytics", "/telematics", "/sustainability", "/compliance", "/settings", "/driver"],
-  warehouse: ["/", "/warehouse", "/shipments", "/map", "/settings"],
-  driver: ["/driver", "/map", "/settings"]
-};
+import { usePermissions } from "@/hooks/usePermissions";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Truck, label: "Fleet", path: "/fleet" },
-  { icon: Box, label: "Warehouse", path: "/warehouse" },
-  { icon: Package, label: "Shipments", path: "/shipments" },
-  { icon: Map, label: "Live Map", path: "/map" },
-  { icon: BarChart3, label: "Analytics", path: "/analytics" },
-  { icon: Fuel, label: "Telematics", path: "/telematics" },
-  { icon: UserCircle, label: "Driver Portal", path: "/driver" },
-  { icon: Leaf, label: "Sustainability", path: "/sustainability" },
-  { icon: Shield, label: "Compliance", path: "/compliance" },
-  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/", key: 'canAccessShipments' }, // Mapping to most relevant perm
+  { icon: Truck, label: "Fleet", path: "/fleet", key: 'canAccessFleet' },
+  { icon: Box, label: "Warehouse", path: "/warehouse", key: 'canAccessWarehouse' },
+  { icon: Package, label: "Shipments", path: "/shipments", key: 'canAccessShipments' },
+  { icon: Map, label: "Live Map", path: "/map", key: 'canAccessLiveMap' },
+  { icon: BarChart3, label: "Analytics", path: "/analytics", key: 'canAccessAnalytics' },
+  { icon: Fuel, label: "Telematics", path: "/telematics", key: 'canAccessTelematics' },
+  { icon: UserCircle, label: "Driver Portal", path: "/driver", key: 'canAccessDriverPortal' },
+  { icon: Leaf, label: "Sustainability", path: "/sustainability", key: 'canAccessSustainability' },
+  { icon: Shield, label: "Compliance", path: "/compliance", key: 'canAccessCompliance' },
+  { icon: Settings, label: "Settings", path: "/settings", key: 'canAccessSettings' },
 ];
 
 const Sidebar = () => {
   const { user } = useUser();
+  const perms = usePermissions();
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
-  // Get role from Clerk metadata or default to 'admin' for now
-  const role = (user?.publicMetadata?.role as Role) || "admin";
-  const accessibleItems = navItems.filter(item => roleAccess[role]?.includes(item.path));
+  const accessibleItems = navItems.filter(item => perms[item.key as keyof typeof perms]);
 
   return (
     <motion.aside
@@ -119,7 +112,7 @@ const Sidebar = () => {
             <div className="flex flex-col overflow-hidden">
               <span className="text-xs font-bold text-foreground truncate">{user?.fullName || "User Profile"}</span>
               <span className="text-[10px] text-muted-foreground truncate uppercase tracking-widest font-bold">
-                {role} account
+                {perms.role} account
               </span>
             </div>
           )}

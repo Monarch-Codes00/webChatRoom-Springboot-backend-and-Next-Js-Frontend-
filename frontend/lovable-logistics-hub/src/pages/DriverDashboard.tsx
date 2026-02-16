@@ -30,17 +30,18 @@ const DriverDashboard = () => {
     mirrors: false,
   });
 
-  const { data: shipments, isLoading } = useQuery({
+  const { data: shipmentsData, isLoading } = useQuery({
     queryKey: ["driver-tasks"],
     queryFn: async () => {
       const resp = await apiService.getShipments();
-      return resp.data || [];
+      return resp.data;
     }
   });
 
+  const shipments = Array.isArray(shipmentsData) ? shipmentsData : [];
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
-  const activeTask = shipments?.find((s: any) => s.id === selectedTaskId) || shipments?.[0] || {
+  const activeTask = shipments.find((s: any) => s.id === selectedTaskId) || shipments[0] || {
     id: "—",
     destination: "No active mission",
     recipient: "—",

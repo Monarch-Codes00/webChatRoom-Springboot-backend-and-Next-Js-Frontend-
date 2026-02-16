@@ -18,9 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { usePermissions } from "@/hooks/usePermissions";
+import { RoleGuard } from "@/components/RoleGuard";
 
 const WarehousePage = () => {
   const queryClient = useQueryClient();
+  const perms = usePermissions();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [reservation, setReservation] = useState({ 
     dockId: 1, 

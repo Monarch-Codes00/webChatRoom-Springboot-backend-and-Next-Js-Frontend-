@@ -90,59 +90,61 @@ const WarehousePage = () => {
             <span className="pl-4 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{fleet.length} TRUCKS IN YARD</span>
           </div>
           
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-all shadow-lg glow-primary">
-                + Bay Assignment
-              </button>
-            </DialogTrigger>
-            <DialogContent className="glass-card border-border/50 max-w-sm">
-              <DialogHeader>
-                <DialogTitle className="text-xl font-bold flex items-center gap-2">
-                  <Box className="w-5 h-5 text-primary" />
-                  Assign Vehicle to Bay
-                </DialogTitle>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="space-y-2">
-                  <Label htmlFor="dock" className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Select Loading Bay</Label>
-                  <select 
-                    id="dock" 
-                    className="w-full h-10 px-3 bg-secondary/50 border border-border/50 rounded-md text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                    value={reservation.dockId}
-                    onChange={(e) => setReservation({...reservation, dockId: parseInt(e.target.value)})}
-                  >
-                    {docks.map((d: any) => (
-                      <option key={d.id} value={d.id}>{d.name} — {d.type} ({d.status})</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="vehicle" className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Available Vehicle</Label>
-                  <select 
-                    id="vehicle" 
-                    className="w-full h-10 px-3 bg-secondary/50 border border-border/50 rounded-md text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                    value={reservation.vehicleNumber}
-                    onChange={(e) => setReservation({...reservation, vehicleNumber: e.target.value})}
-                  >
-                    <option value="">Select ID from Fleet</option>
-                    {fleet.map((v: any) => (
-                      <option key={v.id} value={v.id}>{v.id} ({v.name})</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <DialogFooter>
-                <button 
-                  onClick={() => updateMutation.mutate(reservation)}
-                  disabled={!reservation.vehicleNumber}
-                  className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all shadow-lg disabled:opacity-50"
-                >
-                  INITIALIZE LOAD CYCLE
+          <RoleGuard permission={perms.canAssignVehicles}>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-all shadow-lg glow-primary">
+                  + Bay Assignment
                 </button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent className="glass-card border-border/50 max-w-sm">
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                    <Box className="w-5 h-5 text-primary" />
+                    Assign Vehicle to Bay
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="dock" className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Select Loading Bay</Label>
+                    <select 
+                      id="dock" 
+                      className="w-full h-10 px-3 bg-secondary/50 border border-border/50 rounded-md text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                      value={reservation.dockId}
+                      onChange={(e) => setReservation({...reservation, dockId: parseInt(e.target.value)})}
+                    >
+                      {docks.map((d: any) => (
+                        <option key={d.id} value={d.id}>{d.name} — {d.type} ({d.status})</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="vehicle" className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Available Vehicle</Label>
+                    <select 
+                      id="vehicle" 
+                      className="w-full h-10 px-3 bg-secondary/50 border border-border/50 rounded-md text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                      value={reservation.vehicleNumber}
+                      onChange={(e) => setReservation({...reservation, vehicleNumber: e.target.value})}
+                    >
+                      <option value="">Select ID from Fleet</option>
+                      {fleet.map((v: any) => (
+                        <option key={v.id} value={v.id}>{v.id} ({v.name})</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <button 
+                    onClick={() => updateMutation.mutate(reservation)}
+                    disabled={!reservation.vehicleNumber}
+                    className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all shadow-lg disabled:opacity-50"
+                  >
+                    INITIALIZE LOAD CYCLE
+                  </button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </RoleGuard>
         </div>
       </div>
 
@@ -201,12 +203,14 @@ const WarehousePage = () => {
                       className="h-full bg-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)]" 
                     />
                   </div>
-                  <button 
-                    onClick={() => updateMutation.mutate({ dockId: dock.id, status: 'Available', vehicleNumber: "" })}
-                    className="w-full py-2 mt-1 rounded-lg bg-secondary/50 text-[10px] font-extrabold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all uppercase tracking-widest border border-border/30 hover:border-destructive/30"
-                  >
-                    Release & Log Turnaround
-                  </button>
+                  <RoleGuard permission={perms.canManageDocks}>
+                    <button 
+                      onClick={() => updateMutation.mutate({ dockId: dock.id, status: 'Available', vehicleNumber: "" })}
+                      className="w-full py-2 mt-1 rounded-lg bg-secondary/50 text-[10px] font-extrabold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all uppercase tracking-widest border border-border/30 hover:border-destructive/30"
+                    >
+                      Release & Log Turnaround
+                    </button>
+                  </RoleGuard>
                 </div>
               ) : (
                 <div className="h-[96px] flex flex-col items-center justify-center border-2 border-dashed border-border/50 rounded-xl group-hover:border-primary/30 transition-all bg-muted/5">
@@ -214,15 +218,17 @@ const WarehousePage = () => {
                     {dock.status === 'Maintenance' ? 'Maintenance Cycle Active' : 'Optimal Path Available'}
                   </p>
                   {dock.status === 'Available' && (
-                    <button 
-                      onClick={() => {
-                        setReservation({ ...reservation, dockId: dock.id });
-                        setIsDialogOpen(true);
-                      }}
-                      className="mt-3 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-extrabold hover:bg-primary hover:text-primary-foreground transition-all uppercase tracking-widest"
-                    >
-                      Dock Vehicle
-                    </button>
+                    <RoleGuard permission={perms.canAssignVehicles}>
+                      <button 
+                        onClick={() => {
+                          setReservation({ ...reservation, dockId: dock.id });
+                          setIsDialogOpen(true);
+                        }}
+                        className="mt-3 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-extrabold hover:bg-primary hover:text-primary-foreground transition-all uppercase tracking-widest"
+                      >
+                        Dock Vehicle
+                      </button>
+                    </RoleGuard>
                   )}
                 </div>
               )}
@@ -239,16 +245,18 @@ const WarehousePage = () => {
                    </div>
                 </div>
                 <div className="flex gap-2">
-                  <button 
-                    onClick={() => {
-                      const nextStatus = dock.status === 'Maintenance' ? 'Available' : 'Maintenance';
-                      updateMutation.mutate({ dockId: dock.id, status: nextStatus, vehicleNumber: "" });
-                    }}
-                    className={`p-2 rounded-lg transition-colors ${dock.status === 'Maintenance' ? 'bg-destructive/10 text-destructive' : 'bg-secondary text-muted-foreground hover:text-destructive'}`}
-                    title="Toggle Maintenance"
-                  >
-                    <AlertCircle className="w-3.5 h-3.5" />
-                  </button>
+                  <RoleGuard permission={perms.canManageDocks}>
+                    <button 
+                      onClick={() => {
+                        const nextStatus = dock.status === 'Maintenance' ? 'Available' : 'Maintenance';
+                        updateMutation.mutate({ dockId: dock.id, status: nextStatus, vehicleNumber: "" });
+                      }}
+                      className={`p-2 rounded-lg transition-colors ${dock.status === 'Maintenance' ? 'bg-destructive/10 text-destructive' : 'bg-secondary text-muted-foreground hover:text-destructive'}`}
+                      title="Toggle Maintenance"
+                    >
+                      <AlertCircle className="w-3.5 h-3.5" />
+                    </button>
+                  </RoleGuard>
                   <button className="p-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary transition-colors">
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>

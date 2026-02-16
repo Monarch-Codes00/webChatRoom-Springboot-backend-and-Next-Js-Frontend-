@@ -3,40 +3,8 @@ import { motion } from "framer-motion";
 import { User, Bell, Shield, Palette, Globe, Database, Mail, Key } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { SettingsFormSkeleton, SettingsToggleSkeleton, SmallWidgetSkeleton } from "@/components/DashboardSkeletons";
-
-const settingsSections = [
-  {
-    title: "Profile",
-    icon: User,
-    fields: [
-      { label: "Full Name", value: "Alex Morgan", type: "text" },
-      { label: "Email", value: "alex.morgan@nexuslogistics.com", type: "email" },
-      { label: "Role", value: "Administrator", type: "readonly" },
-      { label: "Phone", value: "+1 (555) 234-5678", type: "text" },
-    ],
-  },
-  {
-    title: "Notifications",
-    icon: Bell,
-    toggles: [
-      { label: "Email notifications for shipment updates", enabled: true },
-      { label: "SMS alerts for vehicle maintenance", enabled: true },
-      { label: "Push notifications for delivery delays", enabled: false },
-      { label: "Weekly analytics digest", enabled: true },
-      { label: "Real-time geofence alerts", enabled: true },
-    ],
-  },
-  {
-    title: "Security",
-    icon: Shield,
-    items: [
-      { label: "Two-Factor Authentication", status: "Enabled", action: "Manage" },
-      { label: "API Keys", status: "2 active keys", action: "View" },
-      { label: "Session Timeout", status: "30 minutes", action: "Change" },
-      { label: "Login History", status: "Last: 2h ago", action: "View" },
-    ],
-  },
-];
+import { useUser } from "@clerk/clerk-react";
+import { usePermissions } from "@/hooks/usePermissions";
 
 const integrations = [
   { name: "Google Maps API", status: "Connected", icon: Globe },
@@ -46,8 +14,42 @@ const integrations = [
 ];
 
 const SettingsPage = () => {
+  const { user } = useUser();
+  const perms = usePermissions();
   const [loading, setLoading] = useState(true);
   useEffect(() => { const t = setTimeout(() => setLoading(false), 1200); return () => clearTimeout(t); }, []);
+
+  const settingsSections = [
+    {
+      title: "Profile",
+      icon: User,
+      fields: [
+        { label: "Full Name", value: user?.fullName || "—", type: "text" },
+        { label: "Email", value: user?.primaryEmailAddress?.emailAddress || "—", type: "email" },
+        { label: "Account Type", value: perms.role.toUpperCase(), type: "readonly" },
+        { label: "Fleet ID", value: perms.role === 'driver' ? "VH-001" : "GLOBAL-01", type: "readonly" },
+      ],
+    },
+    {
+      title: "Notifications",
+      icon: Bell,
+      toggles: [
+        { label: "Email notifications for shipment updates", enabled: true },
+        { label: "SMS alerts for vehicle maintenance", enabled: perms.canManageFleet },
+        { label: "Push notifications for delivery delays", enabled: false },
+        { label: "Weekly analytics digest", enabled: perms.role === 'admin' },
+      ],
+    },
+    {
+      title: "Security & Permissions",
+      icon: Shield,
+      items: [
+        { label: "Two-Factor Authentication", status: "Enabled", action: "Manage" },
+        { label: "Your Permissions", status: `${Object.values(perms).filter(v => v === true).length} capabilities active`, action: "View Map" },
+        { label: "Encryption Protocol", status: "AES-256-GCM Active", action: "View Certs" },
+      ],
+    },
+  ];
 
   if (loading) {
     return (
@@ -78,71 +80,74 @@ const SettingsPage = () => {
         <p className="text-sm text-muted-foreground">Manage your account and platform preferences</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         {/* Main settings */}
         <div className="lg:col-span-2 space-y-4">
-          {/* Profile */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <User className="w-4 h-4 text-primary" />
-              <h3 className="text-sm font-semibold text-foreground">Profile</h3>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {settingsSections[0].fields!.map((f) => (
-                <div key={f.label}>
-                  <label className="text-xs text-muted-foreground mb-1 block">{f.label}</label>
-                  <input
-                    type="text"
-                    defaultValue={f.value}
-                    readOnly={f.type === "readonly"}
-                    className={`w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground outline-none focus:border-primary/50 transition-colors ${f.type === "readonly" ? "opacity-60 cursor-not-allowed" : ""}`}
-                  />
-                </div>
-              ))}
-            </div>
-            <button className="mt-4 px-4 py-2 rounded-lg kpi-gradient-blue text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity">
-              Save Changes
-            </button>
-          </motion.div>
-
-          {/* Notifications */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Bell className="w-4 h-4 text-primary" />
-              <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
-            </div>
-            <div className="space-y-3">
-              {settingsSections[1].toggles!.map((t) => (
-                <div key={t.label} className="flex items-center justify-between py-2">
-                  <span className="text-sm text-foreground">{t.label}</span>
-                  <div className={`w-10 h-5 rounded-full relative cursor-pointer transition-colors ${t.enabled ? "bg-primary" : "bg-secondary"}`}>
-                    <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-foreground transition-transform ${t.enabled ? "left-5" : "left-0.5"}`} />
+          {/* Loop through sections */}
+          {settingsSections.map((section, idx) => (
+            <motion.div 
+              key={section.title}
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: idx * 0.1 }}
+              className="glass-card p-5"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <section.icon className="w-4 h-4 text-primary" />
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">{section.title}</h3>
+              </div>
+              
+              {section.fields && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {section.fields.map((f) => (
+                    <div key={f.label}>
+                      <label className="text-[10px] uppercase font-bold text-muted-foreground mb-1.5 block tracking-tighter">{f.label}</label>
+                      <input
+                        type="text"
+                        defaultValue={f.value}
+                        readOnly={f.type === "readonly"}
+                        className={`w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border/50 text-sm text-foreground outline-none focus:border-primary/50 transition-all font-mono ${f.type === "readonly" ? "opacity-60 cursor-not-allowed bg-muted/20" : ""}`}
+                      />
+                    </div>
+                  ))}
+                  <div className="sm:col-span-2 pt-2">
+                    <button className="px-4 py-2 rounded-lg kpi-gradient-blue text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity">
+                      Update Profile
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          </motion.div>
+              )}
 
-          {/* Security */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Shield className="w-4 h-4 text-primary" />
-              <h3 className="text-sm font-semibold text-foreground">Security</h3>
-            </div>
-            <div className="space-y-3">
-              {settingsSections[2].items!.map((item) => (
-                <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30 border border-border/50">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{item.label}</p>
-                    <p className="text-xs text-muted-foreground">{item.status}</p>
-                  </div>
-                  <button className="px-3 py-1 rounded-lg bg-secondary text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    {item.action}
-                  </button>
+              {section.toggles && (
+                <div className="space-y-4">
+                  {section.toggles.map((t) => (
+                    <div key={t.label} className="flex items-center justify-between py-1 group">
+                      <span className="text-xs font-medium text-foreground group-hover:text-primary transition-colors">{t.label}</span>
+                      <div className={`w-8 h-4 rounded-full relative cursor-pointer transition-all ${t.enabled ? "bg-primary shadow-[0_0_8px_theme(colors.primary.DEFAULT)]" : "bg-muted"}`}>
+                        <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-foreground shadow-sm transition-all ${t.enabled ? "left-4.5" : "left-0.5"}`} />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </motion.div>
+              )}
+
+              {section.items && (
+                <div className="space-y-3">
+                  {section.items.map((item) => (
+                    <div key={item.label} className="flex items-center justify-between p-4 rounded-xl bg-secondary/20 border border-border/50 hover:border-primary/30 transition-all">
+                      <div>
+                        <p className="text-xs font-bold text-foreground">{item.label}</p>
+                        <p className="text-[10px] text-muted-foreground uppercase mt-0.5 font-bold tracking-tighter">{item.status}</p>
+                      </div>
+                      <button className="px-3 py-1.5 rounded-lg bg-secondary text-[10px] font-black uppercase text-muted-foreground hover:text-primary transition-colors border border-border/50">
+                        {item.action}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          ))}
         </div>
 
         {/* Sidebar */}

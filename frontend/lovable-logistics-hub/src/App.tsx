@@ -16,6 +16,7 @@ import CompliancePage from "./pages/Compliance";
 import SettingsPage from "./pages/Settings";
 import DriverDashboard from "./pages/DriverDashboard";
 import WarehousePage from "@/pages/Warehouse";
+import LandingPage from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,7 +31,7 @@ if (!CLERK_PUBLISHABLE_KEY) {
 const RoleProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode, allowedRoles: string[] }) => {
   const { user, isLoaded } = useUser();
   
-  if (!isLoaded) return <div className="h-screen w-screen flex items-center justify-center bg-background"><div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>;
+  if (!isLoaded) return <div className="h-screen w-screen flex items-center justify-center bg-black"><div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_theme(colors.primary.DEFAULT)]" /></div>;
 
   const role = (user?.publicMetadata?.role as string) || "admin";
   
@@ -45,54 +46,71 @@ const RoleProtectedRoute = ({ children, allowedRoles }: { children: React.ReactN
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const { user } = useUser();
+  const role = (user?.publicMetadata?.role as string) || "admin";
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        {/* Public or Common Routes */}
-        <Route path="/" element={<RoleProtectedRoute allowedRoles={["admin", "warehouse"]}><Index /></RoleProtectedRoute>} />
+        {/* Entry Point & Role Redirection Logic */}
+        <Route path="/" element={
+           role === "driver" ? <Navigate to="/driver" replace /> : <Index />
+        } />
+        
         <Route path="/map" element={<MapPage />} />
         <Route path="/settings" element={<SettingsPage />} />
 
-        {/* Admin Only */}
+        {/* Global Control (Admin Only) */}
         <Route path="/fleet" element={<RoleProtectedRoute allowedRoles={["admin"]}><FleetPage /></RoleProtectedRoute>} />
         <Route path="/analytics" element={<RoleProtectedRoute allowedRoles={["admin"]}><AnalyticsPage /></RoleProtectedRoute>} />
         <Route path="/telematics" element={<RoleProtectedRoute allowedRoles={["admin"]}><TelematicsPage /></RoleProtectedRoute>} />
         <Route path="/sustainability" element={<RoleProtectedRoute allowedRoles={["admin"]}><SustainabilityPage /></RoleProtectedRoute>} />
         <Route path="/compliance" element={<RoleProtectedRoute allowedRoles={["admin"]}><CompliancePage /></RoleProtectedRoute>} />
 
-        {/* Warehouse & Admin */}
+        {/* Operational Logistics (Warehouse & Admin) */}
         <Route path="/warehouse" element={<RoleProtectedRoute allowedRoles={["admin", "warehouse"]}><WarehousePage /></RoleProtectedRoute>} />
         <Route path="/shipments" element={<RoleProtectedRoute allowedRoles={["admin", "warehouse"]}><ShipmentsPage /></RoleProtectedRoute>} />
 
-        {/* Driver Only */}
+        {/* Tactical Field Support (Driver Only) */}
         <Route path="/driver" element={<RoleProtectedRoute allowedRoles={["admin", "driver"]}><DriverDashboard /></RoleProtectedRoute>} />
         
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
   );
 };
 
 const App = () => {
-  const content = (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
-
   if (!CLERK_PUBLISHABLE_KEY || CLERK_PUBLISHABLE_KEY === "pk_test_placeholder") {
-    return content;
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AnimatedRoutes />
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
   }
 
   return (
     <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-      {content}
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <SignedOut>
+              <LandingPage />
+            </SignedOut>
+            <SignedIn>
+              <AnimatedRoutes />
+            </SignedIn>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
     </ClerkProvider>
   );
 };

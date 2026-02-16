@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Shield, FileText, AlertTriangle, CheckCircle, Clock, Calendar, Upload, Download } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { KpiCardSkeleton, DocumentListSkeleton, TableSkeleton } from "@/components/DashboardSkeletons";
+import { usePermissions } from "@/hooks/usePermissions";
+import { RoleGuard } from "@/components/RoleGuard";
 
 const documents = [
   { name: "CDL — M. Rodriguez", type: "Driver License", expiry: "Aug 15, 2026", status: "valid" },

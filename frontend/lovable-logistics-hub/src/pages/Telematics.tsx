@@ -4,6 +4,8 @@ import { Activity, Fuel, Thermometer, Gauge, AlertTriangle, Wrench, Battery, Wif
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import DashboardLayout from "@/components/DashboardLayout";
 import { SensorCardSkeleton, ChartSkeleton, AlertSkeleton } from "@/components/DashboardSkeletons";
+import { usePermissions } from "@/hooks/usePermissions";
+import { RoleGuard } from "@/components/RoleGuard";
 
 const engineData = Array.from({ length: 20 }, (_, i) => ({
   time: `${i}m`,

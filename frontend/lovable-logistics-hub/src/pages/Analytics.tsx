@@ -10,6 +10,8 @@ import { KpiCardSkeleton, ChartSkeleton } from "@/components/DashboardSkeletons"
 
 import { useQuery } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
+import { usePermissions } from "@/hooks/usePermissions";
+import { RoleGuard } from "@/components/RoleGuard";
 
 const COLORS = ["hsl(195,100%,50%)", "hsl(142,70%,45%)", "hsl(38,92%,50%)", "hsl(280,65%,60%)"];
 

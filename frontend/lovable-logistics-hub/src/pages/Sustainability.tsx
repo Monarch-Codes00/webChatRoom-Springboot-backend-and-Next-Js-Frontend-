@@ -7,6 +7,9 @@ import { KpiCardSkeleton, ChartSkeleton, EsgScoreSkeleton } from "@/components/D
 
 import { useQuery } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
+import { usePermissions } from "@/hooks/usePermissions";
+import { RoleGuard } from "@/components/RoleGuard";
+import { AlertCircle } from "lucide-react";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload) return null;

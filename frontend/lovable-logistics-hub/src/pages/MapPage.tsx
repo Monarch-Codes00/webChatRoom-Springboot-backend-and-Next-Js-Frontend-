@@ -8,7 +8,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useQuery } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
-import { useUser } from "@clerk/clerk-react";
+import { usePermissions } from "@/hooks/usePermissions";
+import { RoleGuard } from "@/components/RoleGuard";
 
 // Fix for default Leaflet marker icons in Vite
 const DefaultIcon = L.icon({
@@ -30,8 +31,7 @@ const MapFocusHandler = ({ position }: { position: [number, number] }) => {
 };
 
 const MapPage = () => {
-  const { user } = useUser();
-  const role = (user?.publicMetadata?.role as string) || "admin";
+  const perms = usePermissions();
   const [mounted, setMounted] = useState(false);
   const [viewMode, setViewMode] = useState<"standard" | "satellite">("standard");
 
@@ -47,15 +47,15 @@ const MapPage = () => {
   const allVehicles = Array.isArray(vehiclesData) ? vehiclesData : [];
   
   // For role-based filtering: Drivers only see their own (VH-001 for demo)
-  const displayVehicles = role === "driver" 
+  const displayVehicles = perms.role === "driver" 
     ? allVehicles.filter(v => v.id === "VH-001") 
     : allVehicles;
 
   const driverVehicle = allVehicles.find(v => v.id === "VH-001");
-  const mapCenter: [number, number] = role === "driver" && driverVehicle 
+  const mapCenter: [number, number] = perms.role === "driver" && driverVehicle 
     ? (driverVehicle.position as [number, number])
     : [37.0902, -95.7129];
-  const defaultZoom = role === "driver" ? 12 : 4;
+  const defaultZoom = perms.role === "driver" ? 12 : 4;
 
   useEffect(() => {
     setMounted(true);
@@ -85,10 +85,10 @@ const MapPage = () => {
              </div>
              <div>
                 <h2 className="text-xl font-bold text-foreground">
-                  {role === "driver" ? "My Route Command" : "Global Fleet Oversight"}
+                  {perms.role === "driver" ? "My Route Command" : "Global Fleet Oversight"}
                 </h2>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-widest mt-0.5">
-                  {role === "driver" ? "Live Telemetry: VH-001 Active" : `${allVehicles.length} Assets Under Synchronized Tracking`}
+                  {perms.role === "driver" ? "Live Telemetry: VH-001 Active" : `${allVehicles.length} Assets Under Synchronized Tracking`}
                 </p>
              </div>
           </div>
@@ -102,11 +102,11 @@ const MapPage = () => {
             <Layers className="w-4 h-4" /> 
             {viewMode === "satellite" ? "Hybrid Active" : "Satellite Mode"}
           </button>
-          {role === "admin" && (
+          <RoleGuard permission={perms.canManageFleet}>
              <button className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-[10px] font-extrabold uppercase tracking-widest hover:opacity-90 transition-all flex items-center gap-2 shadow-lg shadow-primary/20">
                <Navigation className="w-4 h-4" /> Global Optimization
              </button>
-          )}
+          </RoleGuard>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ const MapPage = () => {
                 subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
               />
               <ZoomControl position="bottomright" />
-              {role === "driver" && driverVehicle && <MapFocusHandler position={driverVehicle.position as [number, number]} />}
+              {perms.role === "driver" && driverVehicle && <MapFocusHandler position={driverVehicle.position as [number, number]} />}
               
               {displayVehicles.map((v) => (
                 <Marker key={v.id} position={v.position as [number, number]}>
@@ -163,7 +163,7 @@ const MapPage = () => {
                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Live Encryption Active</span>
             </div>
-            {role === "driver" && (
+            {perms.role === "driver" && (
               <div className="glass-card px-4 py-2 flex items-center gap-3 bg-primary/20 backdrop-blur-xl border-primary/30">
                  <Target className="w-4 h-4 text-primary animate-spin-slow" />
                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Focused on Asset VH-001</span>
@@ -190,7 +190,7 @@ const MapPage = () => {
         {/* Vehicle list sidebar */}
         <div className="space-y-4 max-h-[650px] overflow-y-auto pr-2 custom-scrollbar">
           <div className="flex items-center justify-between pl-1">
-             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{role === "driver" ? "Unit Status" : "Fleet Terminal"}</p>
+             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{perms.role === "driver" ? "Unit Status" : "Fleet Terminal"}</p>
              <button className="text-primary hover:text-primary/80 transition-colors">
                 <Compass className="w-4 h-4" />
              </button>
@@ -203,7 +203,7 @@ const MapPage = () => {
                 animate={{ opacity: 1, scale: 1 }} 
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ delay: i * 0.05 }} 
-                className={`glass-card p-5 group transition-all duration-300 cursor-pointer relative overflow-hidden ${role === "driver" ? "border-l-4 border-l-primary bg-primary/5" : "hover:border-primary/40 shadow-xl"}`}
+                className={`glass-card p-5 group transition-all duration-300 cursor-pointer relative overflow-hidden ${perms.role === "driver" ? "border-l-4 border-l-primary bg-primary/5" : "hover:border-primary/40 shadow-xl"}`}
               >
                 <div className="flex items-center justify-between mb-2 relative z-10">
                   <div className="flex items-center gap-2">
@@ -231,7 +231,7 @@ const MapPage = () => {
                 </div>
                 
                 {/* Driver-specific indicators */}
-                {role === "driver" && (
+                {perms.role === "driver" && (
                   <div className="mt-4 pt-4 border-t border-white/5">
                      <div className="flex items-center justify-between">
                         <span className="text-[8px] font-black uppercase tracking-widest text-success">Sync Active</span>

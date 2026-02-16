@@ -11,8 +11,12 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { usePermissions } from "@/hooks/usePermissions";
+import { RoleGuard } from "@/components/RoleGuard";
+import { Lock } from "lucide-react";
 
 const DriverDashboard = () => {
+  const perms = usePermissions();
   const queryClient = useQueryClient();
   const [activeStep, setActiveStep] = useState(0);
   const [isReportingIncident, setIsReportingIncident] = useState(false);

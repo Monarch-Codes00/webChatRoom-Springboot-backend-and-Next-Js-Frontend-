@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/documents")
+@CrossOrigin(origins = "*")
 public class DocumentController {
 
     @Autowired

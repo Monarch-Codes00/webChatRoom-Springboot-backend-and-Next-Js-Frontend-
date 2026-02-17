@@ -8,11 +8,34 @@ const api = axios.create({
 
 export const apiService = {
   // Fleet & Vehicles
-  getVehicles: () => api.get("/vehicles"),
+  getVehicles: async () => {
+    const resp = await api.get("/vehicles");
+    // Minimal mapping needed (e.g. lowercase status)
+    const data = resp.data.map((v: any) => ({
+      ...v,
+      status: v.status.toLowerCase()
+    }));
+    return { ...resp, data };
+  },
+
   getVehicleDiagnostics: (id: string | number) => api.get(`/diagnostics/${id}`),
 
   // Shipments
-  getShipments: () => api.get("/shipments"),
+  getShipments: async () => {
+    const resp = await api.get("/shipments");
+    const data = resp.data.map((s: any) => ({
+      ...s,
+      id: s.sId, // Map display ID
+      dbId: s.id, // Keep database ID for operations
+      status: s.status.charAt(0) + s.status.slice(1).toLowerCase().replace('_', ' '),
+      statusType: s.status === 'IN_TRANSIT' ? 'active' : s.status === 'PENDING' ? 'warning' : 'danger',
+      eta: s.status === 'DELIVERED' ? 'Completed' : '4h 30m', // Mock relative time
+      driver: s.assignedVehicle?.driver || "Unassigned",
+      created: s.created ? new Date(s.created).toLocaleDateString() : "Today"
+    }));
+    return { ...resp, data };
+  },
+
   getWaybill: (shipmentId: string | number) => api.get(`/documents/waybill/${shipmentId}`),
 
   // Warehouse & Docks
@@ -21,11 +44,30 @@ export const apiService = {
     api.put(`/docks/${id}/status`, null, { params: { status, vehicleNumber } }),
 
   // Create Operations
-  createVehicle: (data: any) => api.post("/vehicles", data),
+  createVehicle: (data: any) => api.post("/vehicles", {
+    ...data,
+    vId: data.id,
+    driver: data.driver || "Unassigned",
+    status: data.status.toUpperCase(),
+    latitude: 37.7749, // Default
+    longitude: -122.4194,
+    speed: 0
+  }),
+  
   updateVehicle: (id: string | number, data: any) => api.put(`/vehicles/${id}`, data),
   deleteVehicle: (id: string | number) => api.delete(`/vehicles/${id}`),
   
-  createShipment: (data: any) => api.post("/shipments", data),
+  createShipment: (data: any) => api.post("/shipments", {
+    sId: data.id,
+    customer: data.customer,
+    recipientName: "Receiver",
+    origin: data.origin,
+    destination: data.destination,
+    destinationAddress: data.destination + " Main St",
+    weight: data.weight,
+    status: "PENDING"
+  }),
+  
   updateShipment: (id: string | number, data: any) => api.put(`/shipments/${id}`, data),
   deleteShipment: (id: string | number) => api.delete(`/shipments/${id}`),
 

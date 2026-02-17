@@ -16,11 +16,16 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String vehicleNumber;
-    private String model;
-    private String driverName;
+    private String vId; // Display ID (e.g. VN-101)
+    private String plate;
+    private String name; // Model name
+    private String driver;
     private double latitude;
     private double longitude;
     private double speed;
+    private double fuel;
+    private double mileage;
+    private String lastService;
+    private Double temp;
     private String status;
 }

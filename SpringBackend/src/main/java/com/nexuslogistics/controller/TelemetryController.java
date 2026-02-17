@@ -3,10 +3,7 @@ package com.nexuslogistics.controller;
 import com.nexuslogistics.model.Vehicle;
 import com.nexuslogistics.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,6 +30,6 @@ public class TelemetryController {
         // 2. Broadcast the update to all connected frontend clients via WebSockets
         messagingTemplate.convertAndSend("/topic/fleet", vehicleUpdate);
         
-        System.out.println("Broadcasted telemetry for vehicle: " + vehicleUpdate.getVehicleNumber());
+        System.out.println("Broadcasted telemetry for vehicle: " + vehicleUpdate.getVId());
     }
 }

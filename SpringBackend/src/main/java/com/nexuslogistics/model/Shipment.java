@@ -14,12 +14,16 @@ public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String shipmentNumber;
-    private String senderName;
+    private String sId;
+    private String customer;
     private String recipientName;
+    private String origin;
+    private String destination;
     private String destinationAddress;
+    private String weight;
     private String status; // PENDING, IN_TRANSIT, DELIVERED, CANCELLED
     private LocalDateTime estimatedDeliveryTime;
+    private LocalDateTime created;
     
     @ManyToOne
     @JoinColumn(name = "vehicle_id")

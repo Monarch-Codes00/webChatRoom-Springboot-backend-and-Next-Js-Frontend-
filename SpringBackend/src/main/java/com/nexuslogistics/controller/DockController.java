@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/docks")
+@CrossOrigin(origins = "*")
 public class DockController {
 
     @Autowired

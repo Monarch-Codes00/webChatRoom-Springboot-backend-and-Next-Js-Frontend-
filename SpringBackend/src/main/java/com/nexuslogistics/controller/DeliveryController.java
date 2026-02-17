@@ -1,19 +1,34 @@
 package com.nexuslogistics.controller;
 
+import com.nexuslogistics.model.Shipment;
 import com.nexuslogistics.service.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/shipments")
+@CrossOrigin(origins = "*")
 public class DeliveryController {
 
     @Autowired
     private ShipmentService shipmentService;
+
+    @GetMapping
+    public List<Shipment> getAllShipments() {
+        return shipmentService.getAllShipments();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Shipment> getShipmentById(@PathVariable Long id) {
+        return shipmentService.getShipmentById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     /**
      * Endpoint for drivers to submit Proof of Delivery (Signature & Photo).

@@ -45,8 +45,8 @@ public class DataInitializer {
                 dockRepo.saveAll(List.of(d1, d2));
 
                 // Seed Driver Scores
-                scoreRepo.save(new DriverScore(null, "John Doe", 92, 88, 5, 120.5));
-                scoreRepo.save(new DriverScore(null, "Jane Smith", 85, 95, 2, 45.2));
+                scoreRepo.save(new DriverScore(null, "John Doe", 92, 88, 120.5, 5));
+                scoreRepo.save(new DriverScore(null, "Jane Smith", 85, 95, 45.2, 2));
 
                 System.out.println("Test data seeding completed.");
             }

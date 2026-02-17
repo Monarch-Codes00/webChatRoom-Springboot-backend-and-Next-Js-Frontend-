@@ -11,12 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/leaderboard")
+@CrossOrigin(origins = "*")
 public class LeaderboardController {
 
     @Autowired
     private DriverScoreRepository driverScoreRepository;
 
-    @GetMapping("/eco")
+    @GetMapping
     public List<DriverScore> getEcoLeaderboard() {
         return driverScoreRepository.findAllByOrderByEcoScoreDesc();
     }

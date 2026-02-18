@@ -1,0 +1,650 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< com.nexuslogistics:backend >---------------------
+[INFO] Building NexusLogistics Backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ backend ---
+[INFO] Deleting C:\Users\Christopher Obi-Gabr\Pictures\FleetManagement systems\SpringBackend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ backend ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 44 source files with javac [debug release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/SecurityConfig.java:[3,35] cannot access com.nexuslogistics.security.AuthTokenFilter
+  bad source file: C:\Users\Christopher Obi-Gabr\Pictures\FleetManagement systems\SpringBackend\src\main\java\com\nexuslogistics\security\AuthTokenFilter.java
+    file does not contain class com.nexuslogistics.security.AuthTokenFilter
+    Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/AuthTokenFilter.java:[17,8] class JwtAuthenticationFilter is public, should be declared in a file named JwtAuthenticationFilter.java
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[22,13] cannot find symbol
+  symbol:   class VehicleRepository
+  location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[23,13] cannot find symbol
+  symbol:   class ShipmentRepository
+  location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[24,13] cannot find symbol
+  symbol:   class LoadingDockRepository
+  location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[25,13] cannot find symbol
+  symbol:   class DriverScoreRepository
+  location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/SecurityConfig.java:[37,12] cannot find symbol
+  symbol:   class AuthTokenFilter
+  location: class com.nexuslogistics.config.SecurityConfig
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DiagnosticController.java:[24,33] cannot find symbol
+  symbol:   method builder()
+  location: class com.nexuslogistics.model.VehicleDiagnostic
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DispatchController.java:[44,20] cannot find symbol
+  symbol:   method getLatitude()
+  location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DispatchController.java:[45,20] cannot find symbol
+  symbol:   method getLongitude()
+  location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[33,86] cannot find symbol
+  symbol:   method getLatitude()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[33,110] cannot find symbol
+  symbol:   method getLongitude()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[43,37] cannot find symbol
+  symbol:   method getLatitude()
+  location: variable nearest of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[44,37] cannot find symbol
+  symbol:   method getLongitude()
+  location: variable nearest of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[31,35] cannot find symbol
+  symbol:   method builder()
+  location: class com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[37,35] cannot find symbol
+  symbol:   method builder()
+  location: class com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[43,35] cannot find symbol
+  symbol:   method builder()
+  location: class com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[55,30] constructor Vehicle in class com.nexuslogistics.model.Vehicle cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,double,double,double,java.lang.String,double,java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[56,30] constructor Vehicle in class com.nexuslogistics.model.Vehicle cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,double,double,double,java.lang.String,double,java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[57,30] constructor Vehicle in class com.nexuslogistics.model.Vehicle cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,double,double,double,java.lang.String,double,java.lang.String
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[61,31] constructor Shipment in class com.nexuslogistics.model.Shipment cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,java.time.LocalDateTime,java.time.LocalDateTime,com.nexuslogistics.model.Vehicle
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[62,31] constructor Shipment in class com.nexuslogistics.model.Shipment cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,java.time.LocalDateTime,java.time.LocalDateTime,com.nexuslogistics.model.Vehicle
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[66,34] constructor LoadingDock in class com.nexuslogistics.model.LoadingDock cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[67,34] constructor LoadingDock in class com.nexuslogistics.model.LoadingDock cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,<nulltype>,java.lang.String,int
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[71,32] constructor DriverScore in class com.nexuslogistics.model.DriverScore cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,int,int,double,int
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[72,32] constructor DriverScore in class com.nexuslogistics.model.DriverScore cannot be applied to given types;
+  required: no arguments
+  found:    <nulltype>,java.lang.String,int,int,double,int
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/UserDetailsServiceImpl.java:[28,21] cannot find symbol
+  symbol:   method getUsername()
+  location: variable user of type com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/UserDetailsServiceImpl.java:[29,21] cannot find symbol
+  symbol:   method getPassword()
+  location: variable user of type com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/UserDetailsServiceImpl.java:[30,84] cannot find symbol
+  symbol:   method getRole()
+  location: variable user of type com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[24,26] cannot find symbol
+  symbol:   method getId()
+  location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[25,26] cannot find symbol
+  symbol:   method getLatitude()
+  location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[26,26] cannot find symbol
+  symbol:   method getLongitude()
+  location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[27,26] cannot find symbol
+  symbol:   method getSpeed()
+  location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[33,81] cannot find symbol
+  symbol:   method getVId()
+  location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[40,20] cannot find symbol
+  symbol:   method setLatitude(double)
+  location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[41,20] cannot find symbol
+  symbol:   method setLongitude(double)
+  location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[42,20] cannot find symbol
+  symbol:   method setSpeed(double)
+  location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[49,26] cannot find symbol
+  symbol:   method builder()
+  location: class com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[50,27] cannot find symbol
+  symbol:   method getId()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[51,28] cannot find symbol
+  symbol:   method getVId()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[52,30] cannot find symbol
+  symbol:   method getPlate()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[53,29] cannot find symbol
+  symbol:   method getName()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[54,31] cannot find symbol
+  symbol:   method getDriver()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[55,33] cannot find symbol
+  symbol:   method getLatitude()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[56,34] cannot find symbol
+  symbol:   method getLongitude()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[57,30] cannot find symbol
+  symbol:   method getSpeed()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[58,29] cannot find symbol
+  symbol:   method getFuel()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[59,32] cannot find symbol
+  symbol:   method getMileage()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[60,36] cannot find symbol
+  symbol:   method getLastService()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[61,29] cannot find symbol
+  symbol:   method getTemp()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[62,31] cannot find symbol
+  symbol:   method getStatus()
+  location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[68,16] cannot find symbol
+  symbol:   method getId()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[68,50] cannot find symbol
+  symbol:   method getId()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[69,26] cannot find symbol
+  symbol:   method getVId()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[70,28] cannot find symbol
+  symbol:   method getPlate()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[71,27] cannot find symbol
+  symbol:   method getName()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[72,29] cannot find symbol
+  symbol:   method getDriver()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[73,31] cannot find symbol
+  symbol:   method getLatitude()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[74,32] cannot find symbol
+  symbol:   method getLongitude()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[75,28] cannot find symbol
+  symbol:   method getSpeed()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[76,27] cannot find symbol
+  symbol:   method getFuel()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[77,30] cannot find symbol
+  symbol:   method getMileage()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[78,34] cannot find symbol
+  symbol:   method getLastService()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[79,27] cannot find symbol
+  symbol:   method getTemp()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[80,29] cannot find symbol
+  symbol:   method getStatus()
+  location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DocumentController.java:[24,79] incompatible types: com.nexuslogistics.dto.ShipmentDTO cannot be converted to com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[24,49] cannot find symbol
+  symbol:   method getSId()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[13,23] cannot find symbol
+  symbol:   method builder()
+  location: class com.nexuslogistics.model.Waybill
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[15,41] cannot find symbol
+  symbol:   method getSId()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[16,37] cannot find symbol
+  symbol:   method getCustomer()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[17,40] cannot find symbol
+  symbol:   method getRecipientName()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[19,45] cannot find symbol
+  symbol:   method getDestinationAddress()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[21,52] cannot find symbol
+  symbol:   method getWeight()
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[45,16] cannot find symbol
+  symbol:   method getAssignedVehicleId()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[46,43] cannot find symbol
+  symbol:   method getAssignedVehicleId()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[46,78] invalid method reference
+  cannot find symbol
+    symbol:   method setAssignedVehicle()
+    location: class com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[53,21] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[70,27] cannot find symbol
+  symbol:   method builder()
+  location: class com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[71,27] cannot find symbol
+  symbol:   method getId()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[72,28] cannot find symbol
+  symbol:   method getSId()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[73,33] cannot find symbol
+  symbol:   method getCustomer()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[74,38] cannot find symbol
+  symbol:   method getRecipientName()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[75,31] cannot find symbol
+  symbol:   method getOrigin()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[76,36] cannot find symbol
+  symbol:   method getDestination()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[77,43] cannot find symbol
+  symbol:   method getDestinationAddress()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[78,31] cannot find symbol
+  symbol:   method getWeight()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[79,31] cannot find symbol
+  symbol:   method getStatus()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[80,33] cannot find symbol
+  symbol:   method getLatitude()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[81,34] cannot find symbol
+  symbol:   method getLongitude()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[82,46] cannot find symbol
+  symbol:   method getEstimatedDeliveryTime()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[83,32] cannot find symbol
+  symbol:   method getCreated()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[84,42] cannot find symbol
+  symbol:   method getAssignedVehicle()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[84,80] cannot find symbol
+  symbol:   method getAssignedVehicle()
+  location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[90,16] cannot find symbol
+  symbol:   method getId()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[90,50] cannot find symbol
+  symbol:   method getId()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[91,26] cannot find symbol
+  symbol:   method getSId()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[92,31] cannot find symbol
+  symbol:   method getCustomer()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[93,36] cannot find symbol
+  symbol:   method getRecipientName()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[94,29] cannot find symbol
+  symbol:   method getOrigin()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[95,34] cannot find symbol
+  symbol:   method getDestination()
+  location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[INFO] 100 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  7.879 s
+[INFO] Finished at: 2026-02-18T12:06:24+09:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project backend: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/SecurityConfig.java:[3,35] cannot access com.nexuslogistics.security.AuthTokenFilter
+[ERROR]   bad source file: C:\Users\Christopher Obi-Gabr\Pictures\FleetManagement systems\SpringBackend\src\main\java\com\nexuslogistics\security\AuthTokenFilter.java
+[ERROR]     file does not contain class com.nexuslogistics.security.AuthTokenFilter
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/AuthTokenFilter.java:[17,8] class JwtAuthenticationFilter is public, should be declared in a file named JwtAuthenticationFilter.java
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[22,13] cannot find symbol
+[ERROR]   symbol:   class VehicleRepository
+[ERROR]   location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[23,13] cannot find symbol
+[ERROR]   symbol:   class ShipmentRepository
+[ERROR]   location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[24,13] cannot find symbol
+[ERROR]   symbol:   class LoadingDockRepository
+[ERROR]   location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[25,13] cannot find symbol
+[ERROR]   symbol:   class DriverScoreRepository
+[ERROR]   location: class com.nexuslogistics.config.DataInitializer
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/SecurityConfig.java:[37,12] cannot find symbol
+[ERROR]   symbol:   class AuthTokenFilter
+[ERROR]   location: class com.nexuslogistics.config.SecurityConfig
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DiagnosticController.java:[24,33] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.nexuslogistics.model.VehicleDiagnostic
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DispatchController.java:[44,20] cannot find symbol
+[ERROR]   symbol:   method getLatitude()
+[ERROR]   location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DispatchController.java:[45,20] cannot find symbol
+[ERROR]   symbol:   method getLongitude()
+[ERROR]   location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[33,86] cannot find symbol
+[ERROR]   symbol:   method getLatitude()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[33,110] cannot find symbol
+[ERROR]   symbol:   method getLongitude()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[43,37] cannot find symbol
+[ERROR]   symbol:   method getLatitude()
+[ERROR]   location: variable nearest of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/RouteOptimizationService.java:[44,37] cannot find symbol
+[ERROR]   symbol:   method getLongitude()
+[ERROR]   location: variable nearest of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[31,35] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[37,35] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[43,35] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[55,30] constructor Vehicle in class com.nexuslogistics.model.Vehicle cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,double,double,double,java.lang.String,double,java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[56,30] constructor Vehicle in class com.nexuslogistics.model.Vehicle cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,double,double,double,java.lang.String,double,java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[57,30] constructor Vehicle in class com.nexuslogistics.model.Vehicle cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,double,double,double,java.lang.String,double,java.lang.String
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[61,31] constructor Shipment in class com.nexuslogistics.model.Shipment cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,java.time.LocalDateTime,java.time.LocalDateTime,com.nexuslogistics.model.Vehicle
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[62,31] constructor Shipment in class com.nexuslogistics.model.Shipment cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,double,double,java.time.LocalDateTime,java.time.LocalDateTime,com.nexuslogistics.model.Vehicle
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[66,34] constructor LoadingDock in class com.nexuslogistics.model.LoadingDock cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[67,34] constructor LoadingDock in class com.nexuslogistics.model.LoadingDock cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,java.lang.String,java.lang.String,<nulltype>,java.lang.String,int
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[71,32] constructor DriverScore in class com.nexuslogistics.model.DriverScore cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,int,int,double,int
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/config/DataInitializer.java:[72,32] constructor DriverScore in class com.nexuslogistics.model.DriverScore cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    <nulltype>,java.lang.String,int,int,double,int
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/UserDetailsServiceImpl.java:[28,21] cannot find symbol
+[ERROR]   symbol:   method getUsername()
+[ERROR]   location: variable user of type com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/UserDetailsServiceImpl.java:[29,21] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable user of type com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/security/UserDetailsServiceImpl.java:[30,84] cannot find symbol
+[ERROR]   symbol:   method getRole()
+[ERROR]   location: variable user of type com.nexuslogistics.model.User
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[24,26] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[25,26] cannot find symbol
+[ERROR]   symbol:   method getLatitude()
+[ERROR]   location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[26,26] cannot find symbol
+[ERROR]   symbol:   method getLongitude()
+[ERROR]   location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[27,26] cannot find symbol
+[ERROR]   symbol:   method getSpeed()
+[ERROR]   location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/TelemetryController.java:[33,81] cannot find symbol
+[ERROR]   symbol:   method getVId()
+[ERROR]   location: variable vehicleUpdate of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[40,20] cannot find symbol
+[ERROR]   symbol:   method setLatitude(double)
+[ERROR]   location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[41,20] cannot find symbol
+[ERROR]   symbol:   method setLongitude(double)
+[ERROR]   location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[42,20] cannot find symbol
+[ERROR]   symbol:   method setSpeed(double)
+[ERROR]   location: variable vehicle of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[49,26] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[50,27] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[51,28] cannot find symbol
+[ERROR]   symbol:   method getVId()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[52,30] cannot find symbol
+[ERROR]   symbol:   method getPlate()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[53,29] cannot find symbol
+[ERROR]   symbol:   method getName()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[54,31] cannot find symbol
+[ERROR]   symbol:   method getDriver()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[55,33] cannot find symbol
+[ERROR]   symbol:   method getLatitude()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[56,34] cannot find symbol
+[ERROR]   symbol:   method getLongitude()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[57,30] cannot find symbol
+[ERROR]   symbol:   method getSpeed()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[58,29] cannot find symbol
+[ERROR]   symbol:   method getFuel()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[59,32] cannot find symbol
+[ERROR]   symbol:   method getMileage()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[60,36] cannot find symbol
+[ERROR]   symbol:   method getLastService()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[61,29] cannot find symbol
+[ERROR]   symbol:   method getTemp()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[62,31] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Vehicle
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[68,16] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[68,50] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[69,26] cannot find symbol
+[ERROR]   symbol:   method getVId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[70,28] cannot find symbol
+[ERROR]   symbol:   method getPlate()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[71,27] cannot find symbol
+[ERROR]   symbol:   method getName()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[72,29] cannot find symbol
+[ERROR]   symbol:   method getDriver()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[73,31] cannot find symbol
+[ERROR]   symbol:   method getLatitude()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[74,32] cannot find symbol
+[ERROR]   symbol:   method getLongitude()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[75,28] cannot find symbol
+[ERROR]   symbol:   method getSpeed()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[76,27] cannot find symbol
+[ERROR]   symbol:   method getFuel()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[77,30] cannot find symbol
+[ERROR]   symbol:   method getMileage()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[78,34] cannot find symbol
+[ERROR]   symbol:   method getLastService()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[79,27] cannot find symbol
+[ERROR]   symbol:   method getTemp()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/VehicleService.java:[80,29] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.VehicleDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/controller/DocumentController.java:[24,79] incompatible types: com.nexuslogistics.dto.ShipmentDTO cannot be converted to com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[24,49] cannot find symbol
+[ERROR]   symbol:   method getSId()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[13,23] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.nexuslogistics.model.Waybill
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[15,41] cannot find symbol
+[ERROR]   symbol:   method getSId()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[16,37] cannot find symbol
+[ERROR]   symbol:   method getCustomer()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[17,40] cannot find symbol
+[ERROR]   symbol:   method getRecipientName()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[19,45] cannot find symbol
+[ERROR]   symbol:   method getDestinationAddress()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/DocumentService.java:[21,52] cannot find symbol
+[ERROR]   symbol:   method getWeight()
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[45,16] cannot find symbol
+[ERROR]   symbol:   method getAssignedVehicleId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[46,43] cannot find symbol
+[ERROR]   symbol:   method getAssignedVehicleId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[46,78] invalid method reference
+[ERROR]   cannot find symbol
+[ERROR]     symbol:   method setAssignedVehicle()
+[ERROR]     location: class com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[53,21] cannot find symbol
+[ERROR]   symbol:   method setStatus(java.lang.String)
+[ERROR]   location: variable shipment of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[70,27] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[71,27] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[72,28] cannot find symbol
+[ERROR]   symbol:   method getSId()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[73,33] cannot find symbol
+[ERROR]   symbol:   method getCustomer()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[74,38] cannot find symbol
+[ERROR]   symbol:   method getRecipientName()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[75,31] cannot find symbol
+[ERROR]   symbol:   method getOrigin()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[76,36] cannot find symbol
+[ERROR]   symbol:   method getDestination()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[77,43] cannot find symbol
+[ERROR]   symbol:   method getDestinationAddress()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[78,31] cannot find symbol
+[ERROR]   symbol:   method getWeight()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[79,31] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[80,33] cannot find symbol
+[ERROR]   symbol:   method getLatitude()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[81,34] cannot find symbol
+[ERROR]   symbol:   method getLongitude()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[82,46] cannot find symbol
+[ERROR]   symbol:   method getEstimatedDeliveryTime()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[83,32] cannot find symbol
+[ERROR]   symbol:   method getCreated()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[84,42] cannot find symbol
+[ERROR]   symbol:   method getAssignedVehicle()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[84,80] cannot find symbol
+[ERROR]   symbol:   method getAssignedVehicle()
+[ERROR]   location: variable entity of type com.nexuslogistics.model.Shipment
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[90,16] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[90,50] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[91,26] cannot find symbol
+[ERROR]   symbol:   method getSId()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[92,31] cannot find symbol
+[ERROR]   symbol:   method getCustomer()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[93,36] cannot find symbol
+[ERROR]   symbol:   method getRecipientName()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[94,29] cannot find symbol
+[ERROR]   symbol:   method getOrigin()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] /C:/Users/Christopher Obi-Gabr/Pictures/FleetManagement systems/SpringBackend/src/main/java/com/nexuslogistics/service/ShipmentService.java:[95,34] cannot find symbol
+[ERROR]   symbol:   method getDestination()
+[ERROR]   location: variable dto of type com.nexuslogistics.dto.ShipmentDTO
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

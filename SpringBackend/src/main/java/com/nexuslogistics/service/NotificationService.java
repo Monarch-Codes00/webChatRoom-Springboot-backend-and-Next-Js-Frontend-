@@ -9,9 +9,9 @@ public class NotificationService {
     public void sendTrackingUpdate(Shipment shipment) {
         String message = String.format(
             "NexusLogistics Update: Your shipment %s is now %s. Track live: https://nexus-track.io/%s",
-            shipment.getShipmentNumber(),
+            shipment.getSId(),
             shipment.getStatus(),
-            shipment.getShipmentNumber()
+            shipment.getSId()
         );
         
         // Simulating Multi-Channel Broadcast

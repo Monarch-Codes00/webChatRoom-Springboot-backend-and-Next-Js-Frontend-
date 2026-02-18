@@ -40,8 +40,8 @@ public class DataInitializer {
                 shipmentRepo.saveAll(List.of(s1, s2));
 
                 // Seed Loading Docks
-                LoadingDock d1 = new LoadingDock(null, "DOCK-A1", "OCCUPIED", "VN-101", "Unloading Electronics", 15);
-                LoadingDock d2 = new LoadingDock(null, "DOCK-A2", "AVAILABLE", null, "Waiting for arrival", 0);
+                LoadingDock d1 = new LoadingDock(null, "DOCK-A1", "Cold Storage", "OCCUPIED", "VN-101", "Unloading Electronics", 15);
+                LoadingDock d2 = new LoadingDock(null, "DOCK-B2", "Standard Express", "AVAILABLE", null, "Waiting for arrival", 0);
                 dockRepo.saveAll(List.of(d1, d2));
 
                 // Seed Driver Scores

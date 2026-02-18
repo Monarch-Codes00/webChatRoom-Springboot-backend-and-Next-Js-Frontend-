@@ -10,9 +10,10 @@ export const apiService = {
   // Fleet & Vehicles
   getVehicles: async () => {
     const resp = await api.get("/vehicles");
-    // Minimal mapping needed (e.g. lowercase status)
     const data = resp.data.map((v: any) => ({
       ...v,
+      id: v.vId, // Map for UI display
+      dbId: v.id,
       status: v.status.toLowerCase()
     }));
     return { ...resp, data };
@@ -39,26 +40,42 @@ export const apiService = {
   getWaybill: (shipmentId: string | number) => api.get(`/documents/waybill/${shipmentId}`),
 
   // Warehouse & Docks
-  getDocks: () => api.get("/docks"),
-  updateDockStatus: (id: number, status: string, vehicleNumber?: string) => 
-    api.put(`/docks/${id}/status`, null, { params: { status, vehicleNumber } }),
+  getDocks: async () => {
+    const resp = await api.get("/docks");
+    const data = resp.data.map((d: any) => ({
+      ...d,
+      name: d.dockNumber,
+      type: d.dockType,
+      status: d.status.charAt(0) + d.status.slice(1).toLowerCase(),
+      vehicle: d.assignedVId,
+      active: d.currentActivity,
+      tt: d.estimatedTurnaroundTime + "m"
+    }));
+    return { ...resp, data };
+  },
+
+  updateDockStatus: (id: number, status: string, vId?: string) => 
+    api.put(`/docks/${id}/status`, null, { params: { status: status.toUpperCase(), vId } }),
 
   // Create Operations
   createVehicle: (data: any) => api.post("/vehicles", {
     ...data,
-    vId: data.id,
+    vId: data.vId || data.id,
     driver: data.driver || "Unassigned",
-    status: data.status.toUpperCase(),
+    status: (data.status || "ACTIVE").toUpperCase(),
     latitude: 37.7749, // Default
     longitude: -122.4194,
     speed: 0
   }),
   
-  updateVehicle: (id: string | number, data: any) => api.put(`/vehicles/${id}`, data),
+  updateVehicle: (id: string | number, data: any) => api.put(`/vehicles/${id}`, {
+    ...data,
+    status: data.status.toUpperCase()
+  }),
   deleteVehicle: (id: string | number) => api.delete(`/vehicles/${id}`),
   
   createShipment: (data: any) => api.post("/shipments", {
-    sId: data.id,
+    sId: data.sId || data.id,
     customer: data.customer,
     recipientName: "Receiver",
     origin: data.origin,
@@ -68,7 +85,10 @@ export const apiService = {
     status: "PENDING"
   }),
   
-  updateShipment: (id: string | number, data: any) => api.put(`/shipments/${id}`, data),
+  updateShipment: (id: string | number, data: any) => api.put(`/shipments/${id}`, {
+    ...data,
+    status: data.status.toUpperCase()
+  }),
   deleteShipment: (id: string | number) => api.delete(`/shipments/${id}`),
 
   // Sustainability & Analytics

@@ -41,6 +41,10 @@ public class ShipmentService {
         });
     }
 
+    public void deleteShipment(Long id) {
+        shipmentRepository.deleteById(id);
+    }
+
     public List<Shipment> getShipmentsByVehicle(Long vehicleId) {
         return shipmentRepository.findByAssignedVehicleId(vehicleId);
     }

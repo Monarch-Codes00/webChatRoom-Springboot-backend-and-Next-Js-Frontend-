@@ -33,6 +33,22 @@ public class VehicleController {
         return vehicleService.saveVehicle(vehicle);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id, @RequestBody Vehicle vehicleData) {
+        return vehicleService.getVehicleById(id).map(vehicle -> {
+            vehicle.setVId(vehicleData.getVId());
+            vehicle.setPlate(vehicleData.getPlate());
+            vehicle.setName(vehicleData.getName());
+            vehicle.setDriver(vehicleData.getDriver());
+            vehicle.setStatus(vehicleData.getStatus());
+            vehicle.setFuel(vehicleData.getFuel());
+            vehicle.setMileage(vehicleData.getMileage());
+            vehicle.setLastService(vehicleData.getLastService());
+            vehicle.setTemp(vehicleData.getTemp());
+            return ResponseEntity.ok(vehicleService.saveVehicle(vehicle));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/{id}/location")
     public ResponseEntity<Vehicle> updateLocation(
             @PathVariable Long id,

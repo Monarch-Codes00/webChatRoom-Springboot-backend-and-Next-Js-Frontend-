@@ -25,12 +25,12 @@ public class DockController {
     public ResponseEntity<LoadingDock> updateDockStatus(
             @PathVariable Long id, 
             @RequestParam String status,
-            @RequestParam(required = false) String vehicleNumber) {
+            @RequestParam(required = false) String vId) {
         
         return dockRepository.findById(id).map(dock -> {
             dock.setStatus(status);
-            if (vehicleNumber != null) {
-                dock.setAssignedVehicleNumber(vehicleNumber);
+            if (vId != null) {
+                dock.setAssignedVId(vId);
             }
             return ResponseEntity.ok(dockRepository.save(dock));
         }).orElse(ResponseEntity.notFound().build());

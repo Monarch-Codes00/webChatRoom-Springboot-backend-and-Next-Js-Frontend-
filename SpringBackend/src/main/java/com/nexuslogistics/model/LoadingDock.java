@@ -14,8 +14,9 @@ public class LoadingDock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String dockNumber;
+    private String dockType; // Standard, Cold Storage, Express
     private String status; // AVAILABLE, OCCUPIED, MAINTENANCE, RESERVED
-    private String assignedVehicleNumber;
+    private String assignedVId;
     private String currentActivity; // LOADING, UNLOADING, IDLE
     private int estimatedTurnaroundTime; // minutes
 }

@@ -30,6 +30,33 @@ public class DeliveryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    public Shipment createShipment(@RequestBody Shipment shipment) {
+        return shipmentService.saveShipment(shipment);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Shipment> updateShipment(@PathVariable Long id, @RequestBody Shipment shipmentData) {
+        return shipmentService.getShipmentById(id).map(shipment -> {
+            shipment.setSId(shipmentData.getSId());
+            shipment.setCustomer(shipmentData.getCustomer());
+            shipment.setRecipientName(shipmentData.getRecipientName());
+            shipment.setOrigin(shipmentData.getOrigin());
+            shipment.setDestination(shipmentData.getDestination());
+            shipment.setDestinationAddress(shipmentData.getDestinationAddress());
+            shipment.setWeight(shipmentData.getWeight());
+            shipment.setStatus(shipmentData.getStatus());
+            shipment.setEstimatedDeliveryTime(shipmentData.getEstimatedDeliveryTime());
+            return ResponseEntity.ok(shipmentService.saveShipment(shipment));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteShipment(@PathVariable Long id) {
+        shipmentService.deleteShipment(id);
+        return ResponseEntity.noContent().build();
+    }
+
     /**
      * Endpoint for drivers to submit Proof of Delivery (Signature & Photo).
      */

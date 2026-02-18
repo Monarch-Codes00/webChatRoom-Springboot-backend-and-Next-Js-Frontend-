@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 public class DriverScore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String driverName;
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private DriverProfile driver;
+    
     private int safetyScore;
     private int ecoScore;
     private double totalFuelSaved; // liters

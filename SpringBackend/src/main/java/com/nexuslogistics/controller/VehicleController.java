@@ -1,7 +1,9 @@
 package com.nexuslogistics.controller;
 
+import com.nexuslogistics.dto.VehicleDTO;
 import com.nexuslogistics.model.Vehicle;
 import com.nexuslogistics.service.VehicleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,52 +12,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/vehicles")
-@CrossOrigin(origins = "*") // For local development with Next.js
+@CrossOrigin(origins = "*") 
 public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
 
     @GetMapping
-    public List<Vehicle> getAllVehicles() {
+    public List<VehicleDTO> getAllVehicles() {
         return vehicleService.getAllVehicles();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vehicle> getVehicleById(@PathVariable Long id) {
+    public ResponseEntity<VehicleDTO> getVehicleById(@PathVariable Long id) {
         return vehicleService.getVehicleById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Vehicle createVehicle(@RequestBody Vehicle vehicle) {
-        return vehicleService.saveVehicle(vehicle);
+    public ResponseEntity<VehicleDTO> createVehicle(@Valid @RequestBody VehicleDTO vehicleDTO) {
+        return ResponseEntity.ok(vehicleService.saveVehicle(vehicleDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id, @RequestBody Vehicle vehicleData) {
-        return vehicleService.getVehicleById(id).map(vehicle -> {
-            vehicle.setVId(vehicleData.getVId());
-            vehicle.setPlate(vehicleData.getPlate());
-            vehicle.setName(vehicleData.getName());
-            vehicle.setDriver(vehicleData.getDriver());
-            vehicle.setStatus(vehicleData.getStatus());
-            vehicle.setFuel(vehicleData.getFuel());
-            vehicle.setMileage(vehicleData.getMileage());
-            vehicle.setLastService(vehicleData.getLastService());
-            vehicle.setTemp(vehicleData.getTemp());
-            return ResponseEntity.ok(vehicleService.saveVehicle(vehicle));
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<VehicleDTO> updateVehicle(@PathVariable Long id, @Valid @RequestBody VehicleDTO vehicleData) {
+        vehicleData.setId(id);
+        return ResponseEntity.ok(vehicleService.saveVehicle(vehicleData));
     }
 
     @PutMapping("/{id}/location")
-    public ResponseEntity<Vehicle> updateLocation(
+    public ResponseEntity<VehicleDTO> updateLocation(
             @PathVariable Long id,
             @RequestParam double lat,
             @RequestParam double lng,
             @RequestParam double speed) {
-        Vehicle updatedVehicle = vehicleService.updateVehicleLocation(id, lat, lng, speed);
+        VehicleDTO updatedVehicle = vehicleService.updateVehicleLocation(id, lat, lng, speed);
         return updatedVehicle != null ? ResponseEntity.ok(updatedVehicle) : ResponseEntity.notFound().build();
     }
 

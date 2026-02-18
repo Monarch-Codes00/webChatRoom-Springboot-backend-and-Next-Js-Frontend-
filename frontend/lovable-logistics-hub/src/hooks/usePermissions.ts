@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "./useAuth";
 
 export type Role = "admin" | "warehouse" | "driver";
 
@@ -28,11 +28,10 @@ export interface Permissions {
 }
 
 export const usePermissions = (): Permissions => {
-  const { user } = useUser();
+  const { user } = useAuth();
   
-  // Default to 'admin' for development if no role is set in metadata
-  // In production, Clerks publicMetadata.role should be set.
-  const role = (user?.publicMetadata?.role as Role) || "admin";
+  // Default to 'admin' for development if no role is set
+  const role = (user?.role?.toLowerCase() as Role) || "admin";
 
   return {
     role,

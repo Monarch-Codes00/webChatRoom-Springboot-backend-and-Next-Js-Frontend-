@@ -1,10 +1,21 @@
-import { SignInButton, SignUpButton } from "@clerk/clerk-react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Truck, Shield, Zap, ArrowRight, Globe, BarChart3, Clock } from "lucide-react";
+import AuthModal from "@/components/AuthModal";
 
 const LandingPage = () => {
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
+
+  const openAuth = (mode: "login" | "register") => {
+    setAuthMode(mode);
+    setIsAuthOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary/30 selection:text-primary overflow-x-hidden">
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
+      
       {/* Background Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
@@ -27,16 +38,18 @@ const LandingPage = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <SignInButton mode="modal">
-            <button className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
-              Operator Log In
-            </button>
-          </SignInButton>
-          <SignUpButton mode="modal">
-            <button className="px-6 py-2.5 rounded-xl bg-primary text-black text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)]">
-              Register Fleet
-            </button>
-          </SignUpButton>
+          <button 
+            onClick={() => openAuth("login")}
+            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-white transition-colors"
+          >
+            Operator Log In
+          </button>
+          <button 
+            onClick={() => openAuth("register")}
+            className="px-6 py-2.5 rounded-xl bg-primary text-black text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)]"
+          >
+            Register Fleet
+          </button>
         </div>
       </nav>
 
@@ -59,16 +72,18 @@ const LandingPage = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <SignUpButton mode="modal">
-              <button className="group px-8 py-5 rounded-2xl bg-primary text-black text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_30px_rgba(34,197,94,0.4)] flex items-center gap-3">
-                Initialize Headquarters <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </SignUpButton>
-            <SignInButton mode="modal">
-              <button className="px-8 py-5 rounded-2xl bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all backdrop-blur-md">
-                Enter Terminal
-              </button>
-            </SignInButton>
+            <button 
+              onClick={() => openAuth("register")}
+              className="group px-8 py-5 rounded-2xl bg-primary text-black text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_30px_rgba(34,197,94,0.4)] flex items-center gap-3"
+            >
+              Initialize Headquarters <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button 
+              onClick={() => openAuth("login")}
+              className="px-8 py-5 rounded-2xl bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all backdrop-blur-md"
+            >
+              Enter Terminal
+            </button>
           </div>
         </motion.div>
 

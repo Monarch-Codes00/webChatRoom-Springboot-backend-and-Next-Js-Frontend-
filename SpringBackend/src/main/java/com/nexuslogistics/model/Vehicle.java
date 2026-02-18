@@ -1,9 +1,6 @@
 package com.nexuslogistics.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +18,9 @@ public class Vehicle {
     private String vId; // Display ID (e.g. VN-101)
     private String plate;
     private String name; // Model name
-    private String driver;
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private DriverProfile driver;
     private double latitude;
     private double longitude;
     private double speed;

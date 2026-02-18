@@ -3,6 +3,7 @@ package com.nexuslogistics.controller;
 import com.nexuslogistics.dto.JwtResponse;
 import com.nexuslogistics.dto.LoginRequest;
 import com.nexuslogistics.dto.SignupRequest;
+import com.nexuslogistics.model.ERole;
 import com.nexuslogistics.model.User;
 import com.nexuslogistics.repository.UserRepository;
 import com.nexuslogistics.security.JwtUtils;
@@ -50,7 +51,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt, 
                                  user.getUsername(), 
                                  user.getEmail(), 
-                                 user.getRole()));
+                                 user.getRole().name()));
     }
 
     @PostMapping("/signup")
@@ -68,11 +69,32 @@ public class AuthController {
         }
 
         // Create new user's account
+        String strRole = signUpRequest.getRole();
+        ERole role;
+
+        if (strRole == null) {
+            role = ERole.ROLE_USER;
+        } else {
+            switch (strRole.toUpperCase()) {
+                case "ADMIN":
+                    role = ERole.ROLE_ADMIN;
+                    break;
+                case "DRIVER":
+                    role = ERole.ROLE_DRIVER;
+                    break;
+                case "DISPATCHER":
+                    role = ERole.ROLE_DISPATCHER;
+                    break;
+                default:
+                    role = ERole.ROLE_USER;
+            }
+        }
+
         User user = User.builder()
                 .username(signUpRequest.getUsername())
                 .email(signUpRequest.getEmail())
                 .password(encoder.encode(signUpRequest.getPassword()))
-                .role(signUpRequest.getRole() == null ? "DRIVER" : signUpRequest.getRole().toUpperCase())
+                .role(role)
                 .enabled(true)
                 .build();
 

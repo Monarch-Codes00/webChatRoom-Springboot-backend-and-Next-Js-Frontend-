@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { User, Bell, Shield, Palette, Globe, Database, Mail, Key } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { SettingsFormSkeleton, SettingsToggleSkeleton, SmallWidgetSkeleton } from "@/components/DashboardSkeletons";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
 
 const integrations = [
@@ -14,7 +14,7 @@ const integrations = [
 ];
 
 const SettingsPage = () => {
-  const { user } = useUser();
+  const { user } = useAuth();
   const perms = usePermissions();
   const [loading, setLoading] = useState(true);
   useEffect(() => { const t = setTimeout(() => setLoading(false), 1200); return () => clearTimeout(t); }, []);
@@ -24,8 +24,8 @@ const SettingsPage = () => {
       title: "Profile",
       icon: User,
       fields: [
-        { label: "Full Name", value: user?.fullName || "—", type: "text" },
-        { label: "Email", value: user?.primaryEmailAddress?.emailAddress || "—", type: "email" },
+        { label: "Username", value: user?.username || "—", type: "text" },
+        { label: "Email", value: user?.email || "—", type: "email" },
         { label: "Account Type", value: perms.role.toUpperCase(), type: "readonly" },
         { label: "Fleet ID", value: perms.role === 'driver' ? "VH-001" : "GLOBAL-01", type: "readonly" },
       ],

@@ -6,7 +6,38 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
+// Add a request interceptor to include the JWT token
+api.interceptors.request.use(
+  (config) => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user && user.token) {
+      config.headers["Authorization"] = "Bearer " + user.token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export const apiService = {
+  // Authentication
+  login: async (credentials: any) => {
+    const resp = await api.post("/auth/signin", credentials);
+    if (resp.data.token) {
+      localStorage.setItem("user", JSON.stringify(resp.data));
+    }
+    return resp.data;
+  },
+
+  logout: () => {
+    localStorage.removeItem("user");
+  },
+
+  getCurrentUser: () => {
+    return JSON.parse(localStorage.getItem("user") || "null");
+  },
+
   // Fleet & Vehicles
   getVehicles: async () => {
     const resp = await api.get("/vehicles");

@@ -1,12 +1,16 @@
 package com.nexuslogistics.service;
 
+import com.nexuslogistics.dto.ShipmentDTO;
 import com.nexuslogistics.model.Shipment;
+import com.nexuslogistics.model.Vehicle;
 import com.nexuslogistics.repository.ShipmentRepository;
+import com.nexuslogistics.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShipmentService {
@@ -15,22 +19,33 @@ public class ShipmentService {
     private ShipmentRepository shipmentRepository;
 
     @Autowired
+    private VehicleRepository vehicleRepository;
+
+    @Autowired
     private NotificationService notificationService;
 
-    public List<Shipment> getAllShipments() {
-        return shipmentRepository.findAll();
+    public List<ShipmentDTO> getAllShipments() {
+        return shipmentRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Shipment> getShipmentsByStatus(String status) {
-        return shipmentRepository.findByStatus(status);
+    public List<ShipmentDTO> getShipmentsByStatus(String status) {
+        return shipmentRepository.findByStatus(status).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Shipment> getShipmentById(Long id) {
-        return shipmentRepository.findById(id);
+    public Optional<ShipmentDTO> getShipmentById(Long id) {
+        return shipmentRepository.findById(id).map(this::convertToDTO);
     }
 
-    public Shipment saveShipment(Shipment shipment) {
-        return shipmentRepository.save(shipment);
+    public ShipmentDTO saveShipment(ShipmentDTO dto) {
+        Shipment entity = convertToEntity(dto);
+        if (dto.getAssignedVehicleId() != null) {
+            vehicleRepository.findById(dto.getAssignedVehicleId()).ifPresent(entity::setAssignedVehicle);
+        }
+        return convertToDTO(shipmentRepository.save(entity));
     }
 
     public void updateStatus(Long id, String status) {
@@ -45,7 +60,42 @@ public class ShipmentService {
         shipmentRepository.deleteById(id);
     }
 
-    public List<Shipment> getShipmentsByVehicle(Long vehicleId) {
-        return shipmentRepository.findByAssignedVehicleId(vehicleId);
+    public List<ShipmentDTO> getShipmentsByVehicle(Long vehicleId) {
+        return shipmentRepository.findByAssignedVehicleId(vehicleId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ShipmentDTO convertToDTO(Shipment entity) {
+        return ShipmentDTO.builder()
+                .id(entity.getId())
+                .sId(entity.getSId())
+                .customer(entity.getCustomer())
+                .recipientName(entity.getRecipientName())
+                .origin(entity.getOrigin())
+                .destination(entity.getDestination())
+                .destinationAddress(entity.getDestinationAddress())
+                .weight(entity.getWeight())
+                .status(entity.getStatus())
+                .estimatedDeliveryTime(entity.getEstimatedDeliveryTime())
+                .created(entity.getCreated())
+                .assignedVehicleId(entity.getAssignedVehicle() != null ? entity.getAssignedVehicle().getId() : null)
+                .build();
+    }
+
+    private Shipment convertToEntity(ShipmentDTO dto) {
+        Shipment entity = new Shipment();
+        if (dto.getId() != null) entity.setId(dto.getId());
+        entity.setSId(dto.getSId());
+        entity.setCustomer(dto.getCustomer());
+        entity.setRecipientName(dto.getRecipientName());
+        entity.setOrigin(dto.getOrigin());
+        entity.setDestination(dto.getDestination());
+        entity.setDestinationAddress(dto.getDestinationAddress());
+        entity.setWeight(dto.getWeight());
+        entity.setStatus(dto.getStatus());
+        entity.setEstimatedDeliveryTime(dto.getEstimatedDeliveryTime());
+        entity.setCreated(dto.getCreated());
+        return entity;
     }
 }

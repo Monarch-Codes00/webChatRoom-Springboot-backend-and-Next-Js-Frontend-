@@ -16,11 +16,11 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { apiService } from "@/services/apiService";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
-  const { user } = useUser();
-  const role = (user?.publicMetadata?.role as string) || "admin";
+  const { user } = useAuth();
+  const role = user?.role?.toLowerCase() || "admin";
 
   const { data: metrics, isLoading } = useQuery({
     queryKey: ["dashboard-metrics"],

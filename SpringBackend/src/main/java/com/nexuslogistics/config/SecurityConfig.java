@@ -27,7 +27,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/ws-logistics/**").permitAll() // WebSockets
-                .requestMatchers("/api/telemetry/**").permitAll() // IoT devices usually use simple tokens or certificates
+                .requestMatchers("/api/telemetry/**").permitAll() // IoT
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Swagger
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));

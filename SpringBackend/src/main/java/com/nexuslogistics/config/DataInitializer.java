@@ -4,10 +4,9 @@ import com.nexuslogistics.model.Vehicle;
 import com.nexuslogistics.model.Shipment;
 import com.nexuslogistics.model.LoadingDock;
 import com.nexuslogistics.model.DriverScore;
-import com.nexuslogistics.repository.VehicleRepository;
-import com.nexuslogistics.repository.ShipmentRepository;
-import com.nexuslogistics.repository.LoadingDockRepository;
-import com.nexuslogistics.repository.DriverScoreRepository;
+import com.nexuslogistics.model.User;
+import com.nexuslogistics.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +22,32 @@ public class DataInitializer {
             VehicleRepository vehicleRepo,
             ShipmentRepository shipmentRepo,
             LoadingDockRepository dockRepo,
-            DriverScoreRepository scoreRepo) {
+            DriverScoreRepository scoreRepo,
+            UserRepository userRepo,
+            PasswordEncoder encoder) {
         return args -> {
+            if (userRepo.count() == 0) {
+                System.out.println("Seeding default users...");
+                userRepo.save(User.builder()
+                        .username("admin")
+                        .email("admin@nexus.com")
+                        .password(encoder.encode("admin123"))
+                        .role("ADMIN")
+                        .build());
+                userRepo.save(User.builder()
+                        .username("driver")
+                        .email("driver@nexus.com")
+                        .password(encoder.encode("driver123"))
+                        .role("DRIVER")
+                        .build());
+                userRepo.save(User.builder()
+                        .username("warehouse")
+                        .email("warehouse@nexus.com")
+                        .password(encoder.encode("warehouse123"))
+                        .role("WAREHOUSE")
+                        .build());
+            }
+
             if (vehicleRepo.count() == 0) {
                 System.out.println("No data found. Seeding initial test data...");
 

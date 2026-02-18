@@ -33,7 +33,7 @@ public class ShipmentDTO {
     @NotBlank(message = "Destination address is required")
     private String destinationAddress;
     
-    private String weight;
+    private double weightKg;
     
     @NotBlank(message = "Status is required")
     private String status;

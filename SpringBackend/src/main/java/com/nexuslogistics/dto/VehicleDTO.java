@@ -39,4 +39,5 @@ public class VehicleDTO {
     
     @NotBlank(message = "Status is required")
     private String status;
+    private double maxCapacity;
 }

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-    @lombok.extern.slf4j.Slf4j
-    @Service
-    public class RouteOptimizationService {
-        
+@lombok.extern.slf4j.Slf4j
+@Service
+public class RouteOptimizationService {
+
     /**
      * Capacity-Constrained Route Optimization (Greedy Heuristic).
      * Orders shipments based on proximity and vehicle capacity constraints.

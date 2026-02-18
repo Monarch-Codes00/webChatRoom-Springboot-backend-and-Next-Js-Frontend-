@@ -43,7 +43,8 @@ public class DispatchController {
         List<Shipment> optimized = routeOptimizationService.optimizeRoute(
             vehicle.getLatitude(), 
             vehicle.getLongitude(), 
-            assignedShipments
+            assignedShipments,
+            vehicle.getMaxCapacity()
         );
 
         return ResponseEntity.ok(optimized);

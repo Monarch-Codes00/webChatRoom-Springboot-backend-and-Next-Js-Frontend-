@@ -72,6 +72,7 @@ public class VehicleService {
                 .lastService(entity.getLastService())
                 .temp(entity.getTemp())
                 .status(entity.getStatus())
+                .maxCapacity(entity.getMaxCapacity())
                 .build();
     }
 
@@ -94,6 +95,7 @@ public class VehicleService {
         entity.setLastService(dto.getLastService());
         entity.setTemp(dto.getTemp());
         entity.setStatus(dto.getStatus());
+        entity.setMaxCapacity(dto.getMaxCapacity());
         return entity;
     }
 }

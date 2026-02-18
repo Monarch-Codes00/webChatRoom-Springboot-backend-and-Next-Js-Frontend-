@@ -5,6 +5,7 @@ import com.nexuslogistics.model.Shipment;
 import com.nexuslogistics.model.Vehicle;
 import com.nexuslogistics.repository.ShipmentRepository;
 import com.nexuslogistics.repository.VehicleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ShipmentService {
 
     @Autowired
@@ -41,6 +43,7 @@ public class ShipmentService {
     }
 
     public ShipmentDTO saveShipment(ShipmentDTO dto) {
+        log.info("Saving shipment: {}", dto.getSId());
         Shipment entity = convertToEntity(dto);
         if (dto.getAssignedVehicleId() != null) {
             vehicleRepository.findById(dto.getAssignedVehicleId()).ifPresent(entity::setAssignedVehicle);
@@ -57,6 +60,7 @@ public class ShipmentService {
     }
 
     public void deleteShipment(Long id) {
+        log.warn("Deleting shipment with ID: {}", id);
         shipmentRepository.deleteById(id);
     }
 
@@ -75,7 +79,7 @@ public class ShipmentService {
                 .origin(entity.getOrigin())
                 .destination(entity.getDestination())
                 .destinationAddress(entity.getDestinationAddress())
-                .weight(entity.getWeight())
+                .weightKg(entity.getWeightKg())
                 .status(entity.getStatus())
                 .latitude(entity.getLatitude())
                 .longitude(entity.getLongitude())
@@ -94,7 +98,7 @@ public class ShipmentService {
         entity.setOrigin(dto.getOrigin());
         entity.setDestination(dto.getDestination());
         entity.setDestinationAddress(dto.getDestinationAddress());
-        entity.setWeight(dto.getWeight());
+        entity.setWeightKg(dto.getWeightKg());
         entity.setStatus(dto.getStatus());
         entity.setLatitude(dto.getLatitude());
         entity.setLongitude(dto.getLongitude());

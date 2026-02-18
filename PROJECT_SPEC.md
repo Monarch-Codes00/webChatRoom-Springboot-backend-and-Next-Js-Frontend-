@@ -8,7 +8,7 @@ NexusLogistics is a state-of-the-art platform designed to revolutionize shipment
 
 ## 2. Core Features (The "Basics")
 
-- **Shipment & Vehicle Tracking**: Live global map view (Google Maps) of all assets.
+- **Shipment & Vehicle Tracking**: Live global map view (Leaflet/OpenStreetMap) of all assets.
 - **Route Optimization Logic**: Multi-stop optimization to minimize fuel consumption and delivery time.
 - **Real-time Status Tracking**: Instant updates on shipping milestones and vehicle health via WebSockets.
 - **Advanced Analytics Dashboard**: Visualizing delivery KPIs, cost analysis, and performance metrics.
@@ -92,7 +92,7 @@ _Focus: Oversight, Profitability, and Rapid Action._
 
 ### Phase 4: Route Optimization & Intelligence (Week 7-8)
 
-- [ ] Integrate Google Directions & Distance Matrix APIs.
+- [ ] Integrate OSRM (Open Source Routing Machine) or GraphHopper APIs for real-world routing.
 - [ ] Implement Route Optimization algorithm (Backend logic).
 - [ ] Build the e-POD system (Image upload & Signature capture).
 

@@ -20,6 +20,24 @@ api.interceptors.request.use(
   }
 );
 
+// Add a response interceptor to handle errors globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      if (error.response.status === 401) {
+        // Unauthorized: token expired or invalid
+        localStorage.removeItem("user");
+        window.location.href = "/";
+      } else if (error.response.status === 403) {
+        // Forbidden: insufficient permissions
+        console.error("Access Forbidden: You do not have permission for this action.");
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const apiService = {
   // Authentication
   login: async (credentials: any) => {
@@ -45,7 +63,8 @@ export const apiService = {
       ...v,
       id: v.vId, // Map for UI display
       dbId: v.id,
-      status: v.status.toLowerCase()
+      status: v.status.toLowerCase(),
+      driver: v.driver?.user?.username || "Unassigned"
     }));
     return { ...resp, data };
   },
@@ -62,7 +81,8 @@ export const apiService = {
       status: s.status.charAt(0) + s.status.slice(1).toLowerCase().replace('_', ' '),
       statusType: s.status === 'IN_TRANSIT' ? 'active' : s.status === 'PENDING' ? 'warning' : 'danger',
       eta: s.status === 'DELIVERED' ? 'Completed' : '4h 30m', // Mock relative time
-      driver: s.assignedVehicle?.driver || "Unassigned",
+      driver: s.assignedVehicle?.driver?.user?.username || "Unassigned",
+      weight: s.weightKg + " kg",
       created: s.created ? new Date(s.created).toLocaleDateString() : "Today"
     }));
     return { ...resp, data };
@@ -92,11 +112,12 @@ export const apiService = {
   createVehicle: (data: any) => api.post("/vehicles", {
     ...data,
     vId: data.vId || data.id,
-    driver: data.driver || "Unassigned",
+    driver: data.driver || null,
     status: (data.status || "ACTIVE").toUpperCase(),
-    latitude: 37.7749, // Default
+    latitude: 37.7749, // Should ideally be picked from map
     longitude: -122.4194,
-    speed: 0
+    speed: 0,
+    maxCapacity: data.maxCapacity || 25000
   }),
   
   updateVehicle: (id: string | number, data: any) => api.put(`/vehicles/${id}`, {
@@ -108,11 +129,11 @@ export const apiService = {
   createShipment: (data: any) => api.post("/shipments", {
     sId: data.sId || data.id,
     customer: data.customer,
-    recipientName: "Receiver",
+    recipientName: data.recipientName || "Receiver",
     origin: data.origin,
     destination: data.destination,
-    destinationAddress: data.destination + " Main St",
-    weight: data.weight,
+    destinationAddress: data.destinationAddress || (data.destination + " Main St"),
+    weightKg: parseFloat(data.weight) || 0,
     status: "PENDING"
   }),
   

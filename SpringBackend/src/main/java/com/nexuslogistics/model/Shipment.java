@@ -31,4 +31,13 @@ public class Shipment {
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle assignedVehicle;
+
+    // e-POD Fields
+    @Column(columnDefinition = "TEXT")
+    private String signatureBase64;
+    
+    private String deliveryPhotoUrl;
+    private LocalDateTime deliveredAt;
+    private Double deliveryLat;
+    private Double deliveryLng;
 }

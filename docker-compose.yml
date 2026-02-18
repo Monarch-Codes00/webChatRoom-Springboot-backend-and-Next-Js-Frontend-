@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: nexus_db
+    environment:
+      POSTGRES_DB: nexus_logistics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: christopher
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./SpringBackend
+    container_name: nexus_backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/nexus_logistics
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: christopher
+    depends_on:
+      - db

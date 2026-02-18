@@ -44,7 +44,8 @@ const FleetPage = () => {
     driver: "Unassigned",
     location: "Main Yard",
     speed: 0,
-    temp: 20.0
+    temp: 20.0,
+    maxCapacity: 25000
   });
 
   const { data: fleetData, isLoading } = useQuery({
@@ -165,6 +166,15 @@ const FleetPage = () => {
                   <div className="space-y-2">
                     <Label htmlFor="id" className="text-xs uppercase font-bold text-muted-foreground">Asset ID</Label>
                     <Input id="id" value={newVehicle.id} readOnly className="bg-muted/50 font-mono text-xs opacity-70" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs uppercase font-bold text-muted-foreground">Max Capacity (kg)</Label>
+                    <Input 
+                      type="number" 
+                      value={newVehicle.maxCapacity} 
+                      onChange={(e) => setNewVehicle({...newVehicle, maxCapacity: parseFloat(e.target.value)})}
+                      className="bg-secondary/50 border-border/50 font-mono"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-xs uppercase font-bold text-muted-foreground">Initial Status</Label>

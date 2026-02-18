@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn, useUser } from "@clerk/clerk-react";
+import { useAuth } from "./hooks/useAuth";
 import Index from "./pages/Index";
 import FleetPage from "./pages/Fleet";
 import ShipmentsPage from "./pages/Shipments";
@@ -21,22 +21,16 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Get the publishable key from environmental variables
-const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!CLERK_PUBLISHABLE_KEY) {
-  console.warn("Missing Clerk Publishable Key - Using local dev mode (Auth disabled)");
-}
-
 const RoleProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode, allowedRoles: string[] }) => {
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded, isSignedIn } = useAuth();
   
   if (!isLoaded) return <div className="h-screen w-screen flex items-center justify-center bg-black"><div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_theme(colors.primary.DEFAULT)]" /></div>;
 
-  const role = (user?.publicMetadata?.role as string) || "admin";
+  if (!isSignedIn) return <Navigate to="/landing" replace />;
+
+  const role = user?.role?.toLowerCase() || "admin";
   
   if (!allowedRoles.includes(role)) {
-    // Redirect to their default page
     const fallback = role === "driver" ? "/driver" : "/";
     return <Navigate to={fallback} replace />;
   }
@@ -46,13 +40,14 @@ const RoleProtectedRoute = ({ children, allowedRoles }: { children: React.ReactN
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const { user } = useUser();
-  const role = (user?.publicMetadata?.role as string) || "admin";
+  const { user } = useAuth();
+  const role = user?.role?.toLowerCase() || "admin";
 
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        {/* Entry Point & Role Redirection Logic */}
+        <Route path="/landing" element={<LandingPage />} />
+        
         <Route path="/" element={
            role === "driver" ? <Navigate to="/driver" replace /> : <Index />
         } />
@@ -81,37 +76,26 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => {
-  if (!CLERK_PUBLISHABLE_KEY || CLERK_PUBLISHABLE_KEY === "pk_test_placeholder") {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AnimatedRoutes />
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
+  const { isSignedIn, isLoaded } = useAuth();
+
+  if (!isLoaded) return null;
 
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <SignedOut>
-              <LandingPage />
-            </SignedOut>
-            <SignedIn>
-              <AnimatedRoutes />
-            </SignedIn>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </ClerkProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          {!isSignedIn ? (
+            <Routes>
+              <Route path="*" element={<LandingPage />} />
+            </Routes>
+          ) : (
+            <AnimatedRoutes />
+          )}
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 };
 

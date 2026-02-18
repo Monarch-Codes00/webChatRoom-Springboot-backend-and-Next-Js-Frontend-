@@ -21,7 +21,7 @@ public class Shipment {
     private String origin;
     private String destination;
     private String destinationAddress;
-    private String weight;
+    private double weightKg;
     private String status; // PENDING, IN_TRANSIT, DELIVERED, CANCELLED
     private double latitude;
     private double longitude;

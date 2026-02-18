@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class RouteOptimizationService {
-
+    @lombok.extern.slf4j.Slf4j
+    @Service
+    public class RouteOptimizationService {
+        
     /**
-     * Simple Greedy Algorithm for traveling salesman problem (TSP) variant.
-     * Orders shipments based on proximity to the last location to minimize travel distance.
+     * Capacity-Constrained Route Optimization (Greedy Heuristic).
+     * Orders shipments based on proximity and vehicle capacity constraints.
      */
-    public List<Shipment> optimizeRoute(double startLat, double startLng, List<Shipment> shipments) {
+    public List<Shipment> optimizeRoute(double startLat, double startLng, List<Shipment> shipments, double maxCapacity) {
         if (shipments == null || shipments.isEmpty()) {
             return new ArrayList<>();
         }
@@ -24,12 +25,16 @@ public class RouteOptimizationService {
 
         double currentLat = startLat;
         double currentLng = startLng;
+        double currentLoad = 0;
 
         while (!unvisited.isEmpty()) {
             Shipment nearest = null;
             double minDistance = Double.MAX_VALUE;
 
             for (Shipment shipment : unvisited) {
+                // Skip if adding this shipment exceeds capacity
+                if (currentLoad + shipment.getWeightKg() > maxCapacity) continue;
+
                 double distance = calculateHaversine(currentLat, currentLng, shipment.getLatitude(), shipment.getLongitude());
                 if (distance < minDistance) {
                     minDistance = distance;
@@ -42,6 +47,10 @@ public class RouteOptimizationService {
                 unvisited.remove(nearest);
                 currentLat = nearest.getLatitude();
                 currentLng = nearest.getLongitude();
+                currentLoad += nearest.getWeightKg();
+            } else {
+                // If no more shipments can fit, we stop (or would need another vehicle)
+                break;
             }
         }
 

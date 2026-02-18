@@ -29,4 +29,5 @@ public class Vehicle {
     private String lastService;
     private Double temp;
     private String status;
+    private double maxCapacity; // in kg or tons
 }

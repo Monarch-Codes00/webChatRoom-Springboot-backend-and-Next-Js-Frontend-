@@ -29,7 +29,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String role; // ADMIN, DRIVER, WAREHOUSE
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ERole role; // ROLE_ADMIN, ROLE_DRIVER, ROLE_DISPATCHER
 
     @Builder.Default
     private boolean enabled = true;

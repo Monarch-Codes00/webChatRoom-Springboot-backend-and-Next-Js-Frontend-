@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useUser, UserButton, SignOutButton } from "@clerk/clerk-react";
+import { useAuth } from "@/hooks/useAuth";
 import {
   LayoutDashboard,
   Truck,
@@ -15,13 +15,14 @@ import {
   Shield,
   Settings,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  LogOut
 } from "lucide-react";
 
 import { usePermissions } from "@/hooks/usePermissions";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/", key: 'canAccessShipments' }, // Mapping to most relevant perm
+  { icon: LayoutDashboard, label: "Dashboard", path: "/", key: 'canAccessShipments' },
   { icon: Truck, label: "Fleet", path: "/fleet", key: 'canAccessFleet' },
   { icon: Box, label: "Warehouse", path: "/warehouse", key: 'canAccessWarehouse' },
   { icon: Package, label: "Shipments", path: "/shipments", key: 'canAccessShipments' },
@@ -35,7 +36,7 @@ const navItems = [
 ];
 
 const Sidebar = () => {
-  const { user } = useUser();
+  const { user, logout } = useAuth();
   const perms = usePermissions();
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
@@ -49,7 +50,7 @@ const Sidebar = () => {
       className="fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border flex flex-col z-50"
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 h-16 border-b border-sidebar-border">
+      <div className="flex items-center gap-3 px-4 h-16 border-b border-sidebar-border focus:outline-none">
         <div className="w-8 h-8 rounded-lg kpi-gradient-blue flex items-center justify-center shrink-0">
           <Package className="w-4 h-4 text-primary-foreground" />
         </div>
@@ -77,9 +78,9 @@ const Sidebar = () => {
               to={item.path}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 group relative ${
                 isActive
-                  ? "bg-primary/10 text-primary glow-border"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:translate-x-0.5"
-              }`}
+                   ? "bg-primary/10 text-primary glow-border"
+                   : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:translate-x-0.5"
+               }`}
             >
               <item.icon
                 className={`w-[18px] h-[18px] shrink-0 ${
@@ -106,15 +107,28 @@ const Sidebar = () => {
 
       {/* User Section / Auth */}
       <div className="p-4 border-t border-sidebar-border space-y-2">
-        <div className="flex items-center gap-3">
-          <UserButton afterSignOutUrl="/" />
-          {!collapsed && (
-            <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-bold text-foreground truncate">{user?.fullName || "User Profile"}</span>
-              <span className="text-[10px] text-muted-foreground truncate uppercase tracking-widest font-bold">
-                {perms.role} account
-              </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+              <UserCircle className="w-5 h-5 text-primary" />
             </div>
+            {!collapsed && (
+              <div className="flex flex-col overflow-hidden">
+                <span className="text-xs font-bold text-foreground truncate">{user?.username || "Guest"}</span>
+                <span className="text-[10px] text-muted-foreground truncate uppercase tracking-widest font-bold">
+                  {user?.role || "GUEST"}
+                </span>
+              </div>
+            )}
+          </div>
+          {!collapsed && (
+             <button 
+               onClick={logout}
+               className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+               title="Sign Out"
+             >
+               <LogOut className="w-4 h-4" />
+             </button>
           )}
         </div>
       </div>

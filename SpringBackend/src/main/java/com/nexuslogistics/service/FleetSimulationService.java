@@ -17,6 +17,12 @@ public class FleetSimulationService {
     private VehicleRepository vehicleRepository;
 
     @Autowired
+    private com.nexuslogistics.repository.ShipmentRepository shipmentRepository;
+
+    @Autowired
+    private GeofencingService geofencingService;
+
+    @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
     private final Random random = new Random();
@@ -43,6 +49,11 @@ public class FleetSimulationService {
                 vehicle.setSpeed(Math.max(40, Math.min(80, vehicle.getSpeed() + speedDelta)));
                 
                 vehicleRepository.save(vehicle);
+                
+                // Perform Geofence checks for assigned shipments
+                shipmentRepository.findByAssignedVehicleId(vehicle.getId()).forEach(shipment -> {
+                    geofencingService.evaluateShipmentGeofence(vehicle, shipment);
+                });
                 
                 // Broadcast to WebSockets
                 messagingTemplate.convertAndSend("/topic/fleet", vehicle);

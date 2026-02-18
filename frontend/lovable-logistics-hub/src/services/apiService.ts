@@ -137,6 +137,18 @@ export const apiService = {
     status: "PENDING"
   }),
   
+  completeShipmentDelivery: (id: string | number, signature: string, photo: File | null, lat: number, lng: number) => {
+    const formData = new FormData();
+    formData.append("signature", signature);
+    if (photo) formData.append("photo", photo);
+    formData.append("lat", lat.toString());
+    formData.append("lng", lng.toString());
+    
+    return api.post(`/shipments/${id}/complete`, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+  },
+  
   updateShipment: (id: string | number, data: any) => api.put(`/shipments/${id}`, {
     ...data,
     status: data.status.toUpperCase()

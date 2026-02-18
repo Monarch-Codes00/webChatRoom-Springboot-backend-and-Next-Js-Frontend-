@@ -43,4 +43,8 @@ public class ShipmentDTO {
     private LocalDateTime estimatedDeliveryTime;
     private LocalDateTime created;
     private Long assignedVehicleId;
+    
+    // e-POD fields for API responses
+    private String signatureBase64;
+    private LocalDateTime deliveredAt;
 }

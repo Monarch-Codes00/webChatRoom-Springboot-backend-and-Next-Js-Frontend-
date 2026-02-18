@@ -14,6 +14,7 @@ import {
 import { usePermissions } from "@/hooks/usePermissions";
 import { RoleGuard } from "@/components/RoleGuard";
 import { Lock } from "lucide-react";
+import SignaturePad from "@/components/SignaturePad";
 
 const DriverDashboard = () => {
   const perms = usePermissions();
@@ -29,6 +30,10 @@ const DriverDashboard = () => {
     fluids: false,
     mirrors: false,
   });
+
+  const [showSignaturePad, setShowSignaturePad] = useState(false);
+  const [signatureData, setSignatureData] = useState<string | null>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
 
   const { data: shipmentsData, isLoading } = useQuery({
     queryKey: ["driver-tasks"],
@@ -71,6 +76,51 @@ const DriverDashboard = () => {
     setShowDVIR(false);
     toast.success("DVIR SUBMITTED", {
       description: "Vehicle VH-001 is cleared for operation.",
+    });
+  };
+
+  const completeDeliveryMutation = useMutation({
+    mutationFn: async (vars: { id: string | number; signature: string; photo: File | null }) => {
+      // Capture live GPS coords for audit trail
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            try {
+              const res = await apiService.completeShipmentDelivery(
+                vars.id, vars.signature, vars.photo, pos.coords.latitude, pos.coords.longitude
+              );
+              resolve(res);
+            } catch (e) { reject(e); }
+          },
+          async () => {
+             // Fallback to default coords if GPS blocked
+             try {
+                const res = await apiService.completeShipmentDelivery(vars.id, vars.signature, vars.photo, 37.7749, -122.4194);
+                resolve(res);
+             } catch (e) { reject(e); }
+          }
+        );
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["driver-tasks"] });
+      toast.success("DELIVERY FINALIZED", { description: "e-POD synced with command center." });
+      setActiveStep(0);
+      setSignatureData(null);
+      setPhotoFile(null);
+      setSelectedTaskId(null);
+    },
+    onError: () => {
+      toast.error("SUBMISSION FAILED", { description: "Error syncinc POD. Check connection." });
+    }
+  });
+
+  const handleFinalizeDelivery = () => {
+    if (!signatureData) return toast.error("Signature required");
+    completeDeliveryMutation.mutate({ 
+      id: activeTask.dbId || activeTask.id, 
+      signature: signatureData, 
+      photo: photoFile 
     });
   };
 
@@ -131,6 +181,18 @@ const DriverDashboard = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {showSignaturePad && (
+          <SignaturePad 
+            onSave={(base64) => {
+              setSignatureData(base64);
+              setShowSignaturePad(false);
+              setActiveStep(2);
+              toast.success("SIGNATURE CAPTURED");
+            }}
+            onClose={() => setShowSignaturePad(false)}
+          />
+        )}
 
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -350,8 +412,10 @@ const DriverDashboard = () => {
               onClick={() => {
                 if (!perms.canSignPOD) return toast.error("ACCESS DENIED: Driver Credentials Required");
                 if (!isDVIRComplete) return toast.error("Complete DVIR first");
+                
+                // Mocking camera interaction
                 setActiveStep(prev => prev === 0 ? 1 : prev);
-                toast.success("PHOTO CAPTURED", { description: "Timestamp and GPS tagged." });
+                toast.success("CAMERA ACTIVE", { description: "Cargo verification logged." });
               }}
               className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-dashed transition-all ${activeStep >= 1 ? 'border-success bg-success/10 text-success' : 'border-border/50 hover:border-primary/50 text-muted-foreground'}`}
             >
@@ -362,22 +426,30 @@ const DriverDashboard = () => {
               onClick={() => {
                 if (!perms.canSignPOD) return toast.error("ACCESS DENIED: Driver Credentials Required");
                 if (activeStep < 1) return toast.error("Take photo first");
-                setActiveStep(prev => prev === 1 ? 2 : prev);
-                toast.success("SIGNATURE CAPTURED", { description: "Encrypted and stored." });
+                setShowSignaturePad(true);
               }}
               className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-dashed transition-all ${activeStep >= 2 ? 'border-success bg-success/10 text-success' : 'border-border/50 hover:border-primary/50 text-muted-foreground'}`}
             >
               <ClipboardList className="w-8 h-8" />
-              <span className="text-xs font-extrabold uppercase tracking-wide">Client Signature</span>
+              <span className="text-xs font-extrabold uppercase tracking-wide">
+                {signatureData ? "Signature Captured" : "Client Signature"}
+              </span>
             </button>
           </div>
           
           <button 
-            disabled={activeStep < 2 || !perms.canSignPOD}
+            disabled={activeStep < 2 || !perms.canSignPOD || completeDeliveryMutation.isPending}
+            onClick={handleFinalizeDelivery}
             className={`w-full py-4 rounded-xl flex items-center justify-center gap-3 transition-all font-extrabold tracking-widest ${activeStep >= 2 ? 'bg-success text-success-foreground shadow-[0_10px_30px_-10px_rgba(34,197,94,0.5)] scale-100 hover:scale-[1.02]' : 'bg-muted text-muted-foreground opacity-50'}`}
           >
-            <CheckCircle2 className="w-6 h-6" />
-            FINALIZE & SUBMIT DELIVERY
+            {completeDeliveryMutation.isPending ? (
+              <span className="animate-pulse">SYNCING AUDIT TRAIL...</span>
+            ) : (
+              <>
+                <CheckCircle2 className="w-6 h-6" />
+                FINALIZE & SUBMIT DELIVERY
+              </>
+            )}
           </button>
         </motion.div>
 

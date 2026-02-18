@@ -59,6 +59,21 @@ public class ShipmentService {
         });
     }
 
+    public void completeDelivery(Long id, String signature, String photoUrl, double lat, double lng) {
+        shipmentRepository.findById(id).ifPresent(shipment -> {
+            shipment.setStatus("DELIVERED");
+            shipment.setSignatureBase64(signature);
+            shipment.setDeliveryPhotoUrl(photoUrl);
+            shipment.setDeliveredAt(LocalDateTime.now());
+            shipment.setDeliveryLat(lat);
+            shipment.setDeliveryLng(lng);
+            shipmentRepository.save(shipment);
+            
+            notificationService.sendTrackingUpdate(shipment);
+            log.info("E-POD captured for shipment {}", shipment.getSId());
+        });
+    }
+
     public void deleteShipment(Long id) {
         log.warn("Deleting shipment with ID: {}", id);
         shipmentRepository.deleteById(id);
@@ -86,6 +101,8 @@ public class ShipmentService {
                 .estimatedDeliveryTime(entity.getEstimatedDeliveryTime())
                 .created(entity.getCreated())
                 .assignedVehicleId(entity.getAssignedVehicle() != null ? entity.getAssignedVehicle().getId() : null)
+                .signatureBase64(entity.getSignatureBase64())
+                .deliveredAt(entity.getDeliveredAt())
                 .build();
     }
 

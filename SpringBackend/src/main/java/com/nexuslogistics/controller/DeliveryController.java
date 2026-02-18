@@ -54,19 +54,16 @@ public class DeliveryController {
     @PostMapping("/{id}/complete")
     public ResponseEntity<String> completeDelivery(
             @PathVariable Long id,
-            @RequestParam("signature") String signatureData, // Base64 signature
-            @RequestParam(value = "photo", required = false) MultipartFile photo) {
+            @RequestParam("signature") String signatureData,
+            @RequestParam(value = "photo", required = false) MultipartFile photo,
+            @RequestParam("lat") double lat,
+            @RequestParam("lng") double lng) {
         
-        // In a real app, we would save the photo to S3/Cloud and store the URL.
-        // For now, we simulate the logic.
+        // Mocking photo upload: in production this returns a URL from S3/CDN
+        String photoUrl = (photo != null) ? "uploads/" + photo.getOriginalFilename() : null;
         
-        System.out.println("Processing e-POD for Shipment: " + id);
-        if (photo != null) {
-            System.out.println("Received photo: " + photo.getOriginalFilename());
-        }
+        shipmentService.completeDelivery(id, signatureData, photoUrl, lat, lng);
         
-        shipmentService.updateStatus(id, "DELIVERED");
-        
-        return ResponseEntity.ok("Delivery completed and e-POD logged successfully.");
+        return ResponseEntity.ok("e-POD logged at [" + lat + ", " + lng + "]. Shipment finalized.");
     }
 }

@@ -22,8 +22,10 @@ public class Shipment {
     private String destinationAddress;
     private String weight;
     private String status; // PENDING, IN_TRANSIT, DELIVERED, CANCELLED
+    private double latitude;
+    private double longitude;
     private LocalDateTime estimatedDeliveryTime;
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
     
     @ManyToOne
     @JoinColumn(name = "vehicle_id")

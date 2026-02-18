@@ -77,6 +77,8 @@ public class ShipmentService {
                 .destinationAddress(entity.getDestinationAddress())
                 .weight(entity.getWeight())
                 .status(entity.getStatus())
+                .latitude(entity.getLatitude())
+                .longitude(entity.getLongitude())
                 .estimatedDeliveryTime(entity.getEstimatedDeliveryTime())
                 .created(entity.getCreated())
                 .assignedVehicleId(entity.getAssignedVehicle() != null ? entity.getAssignedVehicle().getId() : null)
@@ -94,6 +96,8 @@ public class ShipmentService {
         entity.setDestinationAddress(dto.getDestinationAddress());
         entity.setWeight(dto.getWeight());
         entity.setStatus(dto.getStatus());
+        entity.setLatitude(dto.getLatitude());
+        entity.setLongitude(dto.getLongitude());
         entity.setEstimatedDeliveryTime(dto.getEstimatedDeliveryTime());
         entity.setCreated(dto.getCreated());
         return entity;

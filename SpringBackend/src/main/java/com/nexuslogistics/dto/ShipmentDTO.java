@@ -38,6 +38,8 @@ public class ShipmentDTO {
     @NotBlank(message = "Status is required")
     private String status;
     
+    private double latitude;
+    private double longitude;
     private LocalDateTime estimatedDeliveryTime;
     private LocalDateTime created;
     private Long assignedVehicleId;

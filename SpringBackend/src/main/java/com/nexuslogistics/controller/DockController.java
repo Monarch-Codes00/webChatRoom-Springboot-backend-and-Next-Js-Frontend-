@@ -14,11 +14,11 @@ import java.util.List;
 public class DockController {
 
     @Autowired
-    private LoadingDockRepository dockRepository;
+    private com.nexuslogistics.service.LoadingDockService dockService;
 
     @GetMapping
     public List<LoadingDock> getAllDocks() {
-        return dockRepository.findAll();
+        return dockService.getAllDocks();
     }
 
     @PutMapping("/{id}/status")
@@ -27,12 +27,8 @@ public class DockController {
             @RequestParam String status,
             @RequestParam(required = false) String vId) {
         
-        return dockRepository.findById(id).map(dock -> {
-            dock.setStatus(status);
-            if (vId != null) {
-                dock.setAssignedVId(vId);
-            }
-            return ResponseEntity.ok(dockRepository.save(dock));
-        }).orElse(ResponseEntity.notFound().build());
+        return dockService.assignVehicle(id, vId, status)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
